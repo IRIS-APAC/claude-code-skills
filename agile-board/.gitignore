@@ -1,0 +1,4 @@
+# Python artifacts from setup script
+__pycache__/
+*.pyc
+*.pyo

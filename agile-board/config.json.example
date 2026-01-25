@@ -1,0 +1,9 @@
+{
+  "board_type": "zenhub",
+  "workspace_id": "Z2lkOi8vcmFwdG9yL1dvcmtzcGFjZS8xMjM0NTY3",
+  "repository_id": "Z2lkOi8vcmFwdG9yL1JlcG9zaXRvcnkvMTM0NzMyMzU0",
+  "organization_id": "Z2lkOi8vcmFwdG9yL09yZ2FuaXphdGlvbi8xMjM0NTY",
+  "default_labels": ["backend", "python"],
+  "default_pipeline_id": "Z2lkOi8vcmFwdG9yL1BpcGVsaW5lLzM1MjUwMzk",
+  "default_pipeline_name": "Product Backlog"
+}
