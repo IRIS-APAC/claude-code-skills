@@ -211,12 +211,140 @@ See [SKILLS_ANALYSIS.md](SKILLS_ANALYSIS.md) for:
 
 ## Contributing
 
-To add or update skills:
+### Guidelines
+
+**CRITICAL: Keep everything generic and portable!**
+
+This repository is designed to be reusable across organizations and projects. When contributing:
+
+✅ **DO:**
+- Use generic placeholders: `your-org`, `my-org`, `your-repo`, `system-requirements.md`
+- Use generic bucket names: `content-store`, `knowledge-search`
+- Use generic examples that apply to any team or organization
+- Document patterns and best practices, not specific implementations
+- Test that skills work across different contexts
+- **Ensure cross-platform compatibility**: Skills MUST work on Linux, Mac, and Windows
+
+❌ **DON'T:**
+- Include organization names (company names, client names, team names)
+- Reference specific project names or codenames
+- Include real bucket names, account IDs, or resource names
+- Add examples tied to a specific business domain
+- Commit any secrets, credentials, or environment-specific configs
+
+### Adding or Updating Skills
 
 1. Make changes to skills in your local clone
 2. Test changes locally (symlinked skills in `~/.claude/skills/` update immediately)
-3. Commit and push changes
-4. Team members run `git pull` in their clone to get updates
+3. Verify no organization-specific references: `git grep -i "yourorg\|clientname"`
+4. Commit and push changes
+5. Team members run `git pull` in their clone to get updates
+
+### Example Contributions
+
+**Good example** (generic):
+```markdown
+Configure AWS SSO:
+```bash
+aws configure sso
+# SSO session name: my-org
+# SSO start URL: https://your-org.awsapps.com/start
+```
+
+**Bad example** (organization-specific):
+```markdown
+Configure AWS SSO:
+```bash
+aws configure sso
+# SSO session name: acme-corp
+# SSO start URL: https://acme-corp.awsapps.com/start
+```
+
+### Security and Privacy
+
+**Before committing:**
+
+1. **No secrets or credentials**
+   - Never commit API keys, passwords, tokens, or certificates
+   - Use `.env.example` files with placeholder values only
+   - Real configs go in `.gitignore`d files
+
+2. **Review for sensitive information**
+   - No IP addresses, account IDs, or resource ARNs
+   - No real email addresses or usernames
+   - No internal URLs or endpoint addresses
+   - Use `git diff --cached` to review before committing
+
+3. **Git history is permanent**
+   - Don't commit and then remove - it stays in history
+   - If you accidentally commit secrets, notify maintainers immediately
+   - History may need to be rewritten and force-pushed
+
+### Code Quality Standards
+
+**Cross-platform requirement** (MANDATORY):
+- **ALL skills MUST work on Linux, Mac, and Windows**
+- Test on all three platforms before committing
+- Use Python for scripts when possible (cross-platform by default)
+- If using shell scripts, provide both `.sh` (Linux/Mac) and `.ps1` (Windows) versions
+- Avoid platform-specific commands or file paths
+
+**Python scripts** (e.g., `setup.py`):
+- MUST be cross-platform compatible (Windows, Mac, Linux)
+- Use `pathlib` for file paths, not string concatenation
+- Clear error messages and user prompts
+- Handle missing dependencies gracefully
+- Include docstrings and comments
+
+**Markdown documentation**:
+- Use clear headings and structure
+- Include code examples with syntax highlighting
+- Use tables for comparisons
+- Keep line length readable (aim for ~100 chars)
+- Show examples for all platforms when commands differ
+
+**Shell scripts**:
+- MUST provide both `.sh` (Linux/Mac) and `.ps1` (Windows) versions
+- Use `#!/bin/bash` or `#!/usr/bin/env bash` shebang
+- Include error handling (`set -e` for bash)
+- Test on all target platforms before committing
+
+### Testing Changes
+
+Before pushing:
+
+1. **Test locally**: Verify skills load and work as expected
+2. **Check for breakage**: Ensure existing workflows still function
+3. **Cross-platform**: Test on Windows if providing scripts
+4. **Documentation**: Update README.md if adding new features
+
+### Commit Message Format
+
+Use conventional commits:
+
+```
+feat(skill-name): add new feature
+fix(skill-name): correct issue with...
+docs(skill-name): update documentation for...
+refactor(skill-name): reorganize without changing behavior
+chore: update dependencies, tooling, etc.
+```
+
+### Breaking Changes
+
+If your change breaks existing functionality:
+
+1. Clearly document the breaking change in commit message
+2. Update affected documentation
+3. Consider backwards compatibility if feasible
+4. Notify team before pushing
+
+### Getting Help
+
+- Check [SKILLS_ANALYSIS.md](SKILLS_ANALYSIS.md) for design principles
+- Review existing skills for examples and patterns
+- Open an issue for questions or suggestions
+- Discuss major changes before implementing
 
 ## Using with Multiple Skill Repositories
 
@@ -233,3 +361,12 @@ cd ~/projects/other-skills
 ```
 
 All skills coexist in `~/.claude/skills/` and are available to Claude Code.
+
+## License
+
+This repository is provided as-is for use with Claude-compatible tools and platforms. Feel free to use, modify, and distribute these skills for your projects and teams.
+
+When sharing or forking:
+- Maintain the generic, organization-agnostic nature
+- Credit original authors if redistributing
+- Share improvements back with the community (optional but appreciated)
