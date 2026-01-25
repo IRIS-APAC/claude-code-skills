@@ -89,6 +89,7 @@ Commands are lightweight slash commands for common development tasks:
 - **format** - Format code
 - **story** - Create user stories
 - **story-start** - Start work on a story
+- **comment** - Add comment to current story ticket
 
 ## Skills Overview
 
@@ -200,7 +201,8 @@ claude-code-skills/
 │   ├── lint-setup.md
 │   ├── format.md
 │   ├── story.md
-│   └── story-start.md
+│   ├── story-start.md
+│   └── comment.md
 ├── skills/               # Skills (methodology/workflows)
 │   ├── git-workflow/
 │   ├── agile-board/
