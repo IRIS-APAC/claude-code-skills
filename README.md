@@ -260,14 +260,6 @@ Each skill uses Claude's progressive disclosure pattern:
 - Detailed guides in `references/`
 - Only loads what's needed when needed
 
-## Design Documentation
-
-See [SKILLS_ANALYSIS.md](SKILLS_ANALYSIS.md) for:
-- Detailed analysis of what should/shouldn't be a skill
-- Skills vs markdown documentation trade-offs
-- Migration checklist and implementation notes
-- Design principles and best practices
-
 ## Contributing
 
 ### Guidelines
@@ -400,7 +392,6 @@ If your change breaks existing functionality:
 
 ### Getting Help
 
-- Check [SKILLS_ANALYSIS.md](SKILLS_ANALYSIS.md) for design principles
 - Review existing skills for examples and patterns
 - Open an issue for questions or suggestions
 - Discuss major changes before implementing
