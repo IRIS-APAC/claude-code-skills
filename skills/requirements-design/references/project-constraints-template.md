@@ -197,7 +197,186 @@ This document captures the **non-negotiable constraints** and **guiding principl
 
 ---
 
-### 4. Budget & Resource Constraints
+#### Constraint: [Data Sovereignty]
+
+**Description**: All data must be stored and processed within specific geographic regions
+
+**Type**: Legal Requirement | Compliance Mandate | Regulatory Constraint
+
+**Specific Requirements**:
+- **Allowed Regions**: [e.g., "EU only", "Australia only", "US + Canada"]
+- **Prohibited Regions**: [e.g., "Cannot use US data centers for EU customer data"]
+- **Data Transfer**: [e.g., "Cross-border transfers require Standard Contractual Clauses (SCCs)"]
+- **Backup/DR**: [e.g., "Backups must also remain in-region"]
+
+**Rationale**:
+- [GDPR Article 44-50 requirements for EU data]
+- [Australian Privacy Principles (APPs) requirements]
+- [Customer contractual requirements]
+- [National security/government regulations]
+
+**Impact on Design**:
+- [Must use Azure Australia East/Southeast regions only]
+- [Cannot use multi-region replication across borders]
+- [Must design region-specific deployments]
+- [Must configure CDN to respect data locality]
+
+**Flexibility**: None (legally required)
+
+**Verification**:
+- Infrastructure audit: [All resources deployed to approved regions only]
+- Data flow review: [Security team validates no cross-border data movement]
+- Compliance check: [Annual audit confirms data sovereignty compliance]
+
+---
+
+#### Constraint: [Compliance Standards]
+
+**Description**: System must comply with specific industry/security standards
+
+**Type**: Certification Requirement | Regulatory Compliance | Customer Requirement
+
+**Required Standards**:
+| Standard | Scope | Deadline | Impact |
+|----------|-------|----------|--------|
+| ISO 27001 | Information security management | [By Q2 2026] | Security controls, risk management, documentation |
+| SOC 2 Type II | Security, availability, confidentiality | [Annual recertification] | Audit trail, access controls, monitoring |
+| PCI-DSS Level 1 | Payment card data handling | [If handling card data] | Encryption, network segmentation, vulnerability scanning |
+| HIPAA | Healthcare data (if applicable) | [Before patient data] | PHI encryption, BAAs, audit logs |
+| CPS 234 | Australian prudential standard (if applicable) | [Ongoing] | Information security capability |
+| NIST 800-53 | Federal systems (if government) | [Before deployment] | Comprehensive security controls |
+
+**Specific Requirements**:
+- **Access Control**: [MFA required, role-based access, least privilege]
+- **Data Encryption**: [At-rest: AES-256, In-transit: TLS 1.3+]
+- **Audit Logging**: [All access/changes logged, 7-year retention]
+- **Vulnerability Management**: [Monthly scanning, critical patches within 30 days]
+- **Incident Response**: [Documented plan, tested annually]
+- **Business Continuity**: [RTO: 4 hours, RPO: 1 hour]
+
+**Rationale**:
+- [Customer contracts require SOC 2 certification]
+- [Industry regulation mandates PCI-DSS for payment processing]
+- [ISO 27001 demonstrates security maturity to enterprise customers]
+
+**Impact on Design**:
+- [Must implement centralized logging to SIEM]
+- [Must use HSM or key vault for encryption keys]
+- [Must implement network segmentation]
+- [Must design for audit trails on all sensitive operations]
+- [Must integrate with enterprise security tools (vulnerability scanner, SIEM)]
+
+**Flexibility**: None (contractual/regulatory requirement)
+
+**Compliance Evidence**:
+- Security controls documentation: [Required for auditors]
+- Test results: [Penetration testing, vulnerability scans]
+- Process documentation: [Incident response plan, change management]
+- Audit logs: [Automated collection and retention]
+
+**Compliance Timeline**:
+| Milestone | Date | Owner |
+|-----------|------|-------|
+| Controls implementation | [Q1 2026] | Engineering + Security |
+| Internal audit | [Q2 2026] | Internal Audit team |
+| Remediation | [Q3 2026] | Engineering |
+| External audit | [Q4 2026] | Third-party auditor |
+| Certification | [Q4 2026] | Compliance team |
+
+---
+
+### 4. Development & Documentation Infrastructure
+
+#### Constraint: [Source Control System]
+
+**Description**: Source code repository and organization structure
+
+**Type**: Organizational Standard | Tooling Requirement
+
+**Specific Requirements**:
+- **Platform**: [e.g., "GitHub Enterprise", "GitLab", "Bitbucket", "Azure DevOps"]
+- **Organization**: [e.g., "github.com/company-name"]
+- **Repository Structure**:
+  - [e.g., "Monorepo: company-name/platform"]
+  - [e.g., "Multi-repo: company-name/service-name"]
+- **Branch Protection**: [e.g., "Main/develop branches protected, PR reviews required"]
+- **Access Control**: [e.g., "SSO via Okta, team-based permissions"]
+
+**Rationale**:
+- [Enterprise GitHub license already purchased]
+- [Standardized across organization for consistency]
+- [Integration with CI/CD and security scanning tools]
+
+**Impact on Design**:
+- [Must use Git for version control]
+- [Must follow GitFlow branching strategy]
+- [Must configure branch protection rules]
+- [Must integrate with approved CI/CD (GitHub Actions, Azure Pipelines)]
+
+**Repository Setup**:
+```
+Organization: github.com/company-name
+Repository: company-name/project-name
+Branches: main (production), develop (integration), feature/* (development)
+Access: Engineering team (write), Security team (read), Contractors (read on specific repos)
+```
+
+**Flexibility**: None (organizational standard)
+
+**Verification**:
+- [IT configures repository according to template]
+- [Security team validates access controls]
+
+---
+
+#### Constraint: [Documentation Storage]
+
+**Description**: Where project and technical documentation must be maintained
+
+**Type**: Organizational Standard | Knowledge Management
+
+**Specific Requirements**:
+- **Design Documents**: [e.g., "Stored in docs/Design/ in repository"]
+- **API Documentation**: [e.g., "OpenAPI specs in repo, published to internal developer portal"]
+- **User Documentation**: [e.g., "Confluence wiki: company.atlassian.net/wiki/spaces/PROJ"]
+- **Runbooks/Operations**: [e.g., "PagerDuty knowledge base"]
+- **Architecture Decisions**: [e.g., "ADRs in docs/ADR/ in repository"]
+
+**Rationale**:
+- [Single source of truth for each doc type]
+- [Searchability across organization]
+- [Version control for technical docs]
+- [Access control and permissions]
+
+**Documentation Types**:
+| Type | Location | Format | Audience |
+|------|----------|--------|----------|
+| Design docs | Repository: docs/Design/ | Markdown | Technical team |
+| ADRs | Repository: docs/ADR/ | Markdown | Architects, engineers |
+| API specs | Repository: docs/API/ + Developer portal | OpenAPI/Swagger | Developers |
+| User guides | Confluence wiki | Confluence pages | End users |
+| Runbooks | PagerDuty / Wiki | Markdown/Wiki | Operations team |
+| Meeting notes | Confluence | Confluence pages | Stakeholders |
+
+**Impact on Design**:
+- [Must maintain design docs in repository alongside code]
+- [Must generate API docs from code (OpenAPI annotations)]
+- [Must keep docs up-to-date with code changes]
+- [Must follow documentation templates and standards]
+
+**Flexibility**: Low
+- [Can propose alternative for specific use case with justification]
+- [Requires Platform team approval]
+
+**Documentation Standards**:
+- [Use Markdown for technical docs in repository]
+- [Use Confluence for stakeholder-facing content]
+- [Use inline code comments for implementation details]
+- [Update docs in same PR as code changes]
+
+---
+
+### 5. Budget & Resource Constraints
 
 #### Constraint: [Budget Cap]
 

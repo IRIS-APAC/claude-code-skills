@@ -71,23 +71,60 @@ This guide provides a structured approach to gathering requirements through prog
 
 ### 1.4 Timeline & Constraints
 
+**CRITICAL: Ask about constraints FIRST, before diving into requirements.**
+
 **Core Questions:**
 - What is the desired timeline?
 - Is there a hard deadline? If so, why?
 - Are there phases or milestones?
-- What is the budget?
-- Are there fixed constraints (technology, compliance, existing systems)?
+- What is the budget (hard cap or flexible)?
+- Are there fixed constraints?
+
+**Constraint Categories to Explore:**
+
+**Platform & Infrastructure:**
+- Must use specific cloud provider (Azure, AWS, GCP)?
+- Any platform mandates or restrictions?
+- Region restrictions for infrastructure?
+
+**Compliance & Data Sovereignty:**
+- What compliance standards must we meet (GDPR, HIPAA, SOC 2, ISO 27001, PCI-DSS, CPS 234)?
+- Are there data sovereignty requirements (must data stay in EU/Australia/specific region)?
+- Any restrictions on cross-border data transfers?
+- Required security certifications?
+
+**Development Infrastructure:**
+- Which source control system (GitHub Enterprise, GitLab, Azure DevOps)?
+- Which organization/repo structure?
+- Where should documentation be stored (repo, Confluence, SharePoint, wiki)?
+- CI/CD requirements or constraints?
+
+**Architecture & Technology:**
+- Any architecture principles (e.g., "Reuse over Buy over Build")?
+- Approved/banned technologies (languages, frameworks, databases)?
+- Must integrate with specific systems (SSO provider, monitoring, etc.)?
+- Technology standards (specific versions, libraries)?
+
+**Organizational:**
+- Required process involvement (security review, architecture review)?
+- Team size fixed or flexible?
+- Hiring constraints?
+- Required tooling (monitoring, logging, incident management)?
 
 **Probing Questions:**
 - What happens if we don't meet the deadline?
 - Can scope be adjusted to meet timeline?
 - Are there dependencies on other projects or teams?
+- Which constraints are absolute vs flexible?
+- Is there an exception process for any constraints?
 
 **What to Document:**
 - Timeline with phases
 - Critical milestones and why they matter
-- Fixed vs flexible constraints
+- **Non-negotiable constraints** (capture in constraints document immediately)
+- **Flexible preferences** (can be challenged)
 - Dependencies
+- Exception processes (if any)
 
 ---
 

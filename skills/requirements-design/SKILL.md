@@ -141,12 +141,15 @@ You must **challenge, research, and suggest** throughout the requirements proces
 Every project has constraints that are truly non-negotiable:
 - **Platform mandates**: "Must use Azure" or "AWS only"
 - **Architecture principles**: "Reuse over Buy over Build"
-- **Compliance**: "Must meet HIPAA" or "GDPR compliant"
+- **Compliance requirements**: "Must meet GDPR, HIPAA, SOC 2, ISO 27001, PCI-DSS, CPS 234"
+- **Data sovereignty**: "All data must remain in EU", "No cross-border data transfers"
 - **Organizational mandates**: "Must use enterprise SSO" or "Must integrate with ServiceNow"
+- **Source control**: "Must use GitHub Enterprise in company-name org"
+- **Documentation storage**: "Design docs in repo, user docs in Confluence"
 - **Budget hard caps**: "Cannot exceed $50K"
 - **Timeline deadlines**: "Must launch by Q2 (regulatory requirement)"
 - **Technology standards**: "Only approved languages: Python, Java, Go"
-- **Data residency**: "All data must stay in Australia"
+- **Team/resource limits**: "Team fixed at 3 developers, no hiring"
 
 ### How to Capture Constraints
 
@@ -155,12 +158,16 @@ Every project has constraints that are truly non-negotiable:
 "Before we dive in, are there any non-negotiable constraints?
 
 For example:
-- Must use specific cloud provider (Azure vs AWS)?
-- Architecture principles (e.g., 'Reuse over Buy over Build')?
-- Compliance requirements (GDPR, HIPAA)?
-- Organizational mandates (teams, tools, processes)?
-- Hard budget caps or timeline deadlines?
-- Technology restrictions (approved/banned technologies)?
+- Platform: Must use specific cloud provider (Azure vs AWS)?
+- Compliance: Must meet specific standards (GDPR, HIPAA, SOC 2, ISO 27001, PCI-DSS, CPS 234)?
+- Data sovereignty: Must data stay in specific region (EU-only, Australia, no cross-border)?
+- Source control: Which system and organization (GitHub Enterprise, GitLab, Azure DevOps)?
+- Documentation: Where should docs be stored (repo, Confluence, SharePoint)?
+- Architecture principles: Any guiding principles (e.g., 'Reuse over Buy over Build')?
+- Organizational mandates: Required teams, tools, processes (SSO, ServiceNow)?
+- Budget/Timeline: Hard caps or deadlines?
+- Technology: Approved/banned technologies (languages, frameworks)?
+- Team: Fixed team size or hiring constraints?
 
 These will help me provide recommendations that work within your reality."
 ```
