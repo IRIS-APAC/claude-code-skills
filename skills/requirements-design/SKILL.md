@@ -609,12 +609,35 @@ or to /project-management for sprint planning?"
 
 ### Starting the Requirements Process
 
-Begin by asking the user:
+**FIRST: Detect First-Timers**
+
+Before starting the requirements process, ask:
+
+```
+"Is this your first time running a requirements gathering session?
+
+- Yes → I'll guide you through an interactive walkthrough with your actual project
+- No → Let's dive into constraints and requirements
+```
+
+**If user says "Yes" (First-Timer)**:
+1. Acknowledge: "Great! I'll guide you through the process step-by-step."
+2. Set expectations: "We'll work through: understanding the problem → capturing constraints → researching options → creating documents. I'll explain each step as we go."
+3. Reference the example: "You can also review the [end-to-end example](SKILL.md:512-600) to see what a complete session looks like."
+4. Proceed with the standard process below, but **add more explanations** at each step
+
+**If user says "No" (Experienced)**:
+- Proceed with standard process, less hand-holding
+
+---
+
+**Then, begin the requirements process by asking:**
 
 1. **What project or feature are we documenting?**
 
 2. **Are there any non-negotiable constraints?** (platforms, architecture principles, compliance, mandates, budget, timeline, etc.)
    - This is CRITICAL - capture these first
+   - For first-timers: Explain why constraints come first (they guide all other decisions)
 
 3. **Do you have any existing requirements or documentation?**
    - If yes: Ask for the location/path
@@ -627,6 +650,7 @@ Begin by asking the user:
    - **Early stage/unclear vision**: Customer-First approach
    - **Clear requirements**: Technical-First approach
    - **Experienced team/time-constrained**: Parallel approach
+   - For first-timers: Explain what each approach means and recommend one based on their situation
 
 **If existing docs are provided**:
 - Read and analyze them first
