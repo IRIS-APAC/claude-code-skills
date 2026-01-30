@@ -285,7 +285,83 @@ This document captures the **non-negotiable constraints** and **guiding principl
 
 ---
 
-### 4. Development & Documentation Infrastructure
+### 4. Existing Architecture & Technical Landscape
+
+> **Purpose**: Document the existing systems, technologies, and architecture that constrain or inform design decisions.
+
+#### Current Architecture
+
+**Description**: [Overview of existing system architecture, if any]
+
+**Type**: Greenfield | Brownfield | Hybrid | Legacy Modernization
+
+**Existing Systems**:
+| System/Service | Purpose | Technology Stack | Status | Integration Points |
+|---------------|---------|------------------|--------|-------------------|
+| [System name] | [What it does] | [Tech used] | [Active/Legacy/Deprecated] | [How we integrate] |
+| [Example: User Service] | User management & auth | Node.js, PostgreSQL, Redis | Active | REST API, shared DB |
+| [Example: Billing System] | Payment processing | Java, Oracle DB | Legacy (replacing 2027) | SOAP API (unreliable) |
+
+**Existing Data Stores**:
+- **Primary**: [e.g., "PostgreSQL 14 cluster (3 nodes, 500GB)"]
+- **Cache**: [e.g., "Redis (shared with other services)"]
+- **Analytics**: [e.g., "Snowflake data warehouse"]
+- **Files**: [e.g., "S3 bucket (2TB of user uploads)"]
+
+**Existing Infrastructure**:
+- **Cloud**: [e.g., "AWS (99% of workloads)", "On-prem datacenter (legacy only)"]
+- **Container Orchestration**: [e.g., "ECS Fargate", "Kubernetes 1.27", "None - VMs only"]
+- **CI/CD**: [e.g., "GitHub Actions", "Jenkins (legacy)"]
+- **Monitoring**: [e.g., "DataDog", "Prometheus + Grafana", "None yet"]
+
+**Architecture Patterns in Use**:
+- [e.g., "Monolithic Rails app (main product)"]
+- [e.g., "Microservices for new features (5 services)"]
+- [e.g., "Event-driven with SNS/SQS"]
+- [e.g., "API Gateway → Lambda → DynamoDB"]
+
+**Rationale for Documenting**:
+- [Understand what already exists]
+- [Identify integration points and dependencies]
+- [Respect existing investment and knowledge]
+- [Plan migration paths if needed]
+
+**Impact on Design**:
+- **Must integrate with**: [List systems that cannot be replaced]
+- **Should leverage**: [Existing infrastructure/services we should use]
+- **Can replace**: [Legacy systems scheduled for retirement]
+- **Data migration needed**: [If moving from existing datastores]
+
+**Technical Debt**:
+- [Known issues with current architecture, e.g., "Billing SOAP API is slow and unreliable"]
+- [Planned improvements, e.g., "Migrating to new billing service in Q3 2026"]
+- [Workarounds needed, e.g., "Must cache billing API responses aggressively"]
+
+**Migration Strategy** (if applicable):
+- [ ] **Strangler Fig**: Gradually replace legacy system while it runs
+- [ ] **Big Bang**: Full replacement in one deployment
+- [ ] **API Facade**: Keep legacy, add modern interface
+- [ ] **No Migration**: Build alongside existing systems
+
+**Flexibility**: Varies by component
+- [Some systems are untouchable (e.g., core billing)]
+- [Some can be replaced if justified (e.g., old admin UI)]
+- [Document which is which]
+
+**Examples**:
+```
+✅ Good: "Current system uses PostgreSQL. New service will also use PostgreSQL for consistency and can share connection pooling infrastructure."
+
+✅ Good: "Legacy billing API is unreliable. Will implement circuit breaker pattern and aggressive caching. Planning full replacement in Q3 2026."
+
+❌ Bad: "Ignoring existing user service and building a new one without migration plan."
+
+❌ Bad: "Proposed MongoDB for new feature when entire stack uses PostgreSQL (adds operational complexity)."
+```
+
+---
+
+### 5. Development & Documentation Infrastructure
 
 #### Constraint: [Source Control System]
 
@@ -376,7 +452,7 @@ Access: Engineering team (write), Security team (read), Contractors (read on spe
 
 ---
 
-### 5. Budget & Resource Constraints
+### 6. Budget & Resource Constraints
 
 #### Constraint: [Budget Cap]
 
@@ -445,38 +521,68 @@ Access: Engineering team (write), Security team (read), Contractors (read on spe
 
 ---
 
-### 5. Team & Organizational Constraints
+### 7. Team Capacity & Capability
 
-#### Constraint: [Team Size Fixed]
+> **Purpose**: Document who is doing the work and what constraints that creates.
 
-**Description**: Team is 3 developers, cannot grow
+#### Constraint: [Team Composition & Capacity]
 
-**Type**: Resource Constraint | Hiring Freeze
+**Description**: [Describe who is building this - solo developer, small team, large organization, etc.]
 
-**Current Team**:
-- Backend: [1 senior developer]
-- Frontend: [1 mid-level developer]
-- Full-stack: [1 junior developer]
+**Type**: Resource Constraint | Capacity Limitation | Skills Constraint
 
-**Skills**:
-- Strong: [Python, TypeScript, React, PostgreSQL]
-- Moderate: [Azure, Docker, CI/CD]
-- Weak: [Kubernetes, service mesh, distributed systems]
+**Current Capacity**:
 
-**Rationale**:
-- [Budget constraints]
-- [Hiring freeze across organization]
+*Choose the scenario that applies:*
+
+**Scenario 1: Solo Developer / Building It Yourself**
+- **You**: [Your role, e.g., "Full-stack developer", "Technical founder", "Product engineer"]
+- **Availability**: [e.g., "20 hours/week (nights & weekends)", "Full-time", "50% of time (other projects too)"]
+- **Your Skills**:
+  - Strong: [e.g., "React, Node.js, PostgreSQL, AWS basics"]
+  - Learning: [e.g., "TypeScript, Docker"]
+  - Weak/Avoid: [e.g., "Kubernetes, distributed systems, DevOps"]
+- **Support Available**: [e.g., "Can ask CTO for architecture review", "Have DevOps consultant on retainer (5 hrs/month)", "None - solo"]
+
+**Scenario 2: Small Team (2-5 people)**
+- **Team Size**: [e.g., "3 developers"]
+- **Team Composition**:
+  - Backend: [e.g., "1 senior developer (you)"]
+  - Frontend: [e.g., "1 mid-level developer"]
+  - Full-stack: [e.g., "1 junior developer"]
+- **Collective Skills**:
+  - Strong: [Python, TypeScript, React, PostgreSQL]
+  - Moderate: [Azure, Docker, CI/CD]
+  - Weak: [Kubernetes, service mesh, distributed systems]
+- **Contractors/Support**: [e.g., "Can hire contractors for < 3 months", "DevOps team provides infrastructure support"]
+
+**Scenario 3: Established Team**
+- **Team Size**: [e.g., "12 engineers across 3 squads"]
+- **Specializations**: [e.g., "Backend squad (4), Frontend squad (4), Platform squad (4)"]
+- **Support Functions**: [e.g., "Dedicated DevOps (2), QA (3), Security (shared)"]
+- **Skills**: [Document team-wide capabilities]
+
+**Rationale for Constraints**:
+- [Budget constraints - cannot hire]
+- [Timeline - working solo means slower delivery]
+- [Skills gaps - team needs to learn new tech]
+- [Availability - part-time work only]
 
 **Impact on Design**:
-- [Must limit operational complexity]
-- [Must use managed services heavily]
-- [Must avoid technologies requiring specialized expertise]
-- [Must design for team's existing skills]
+- **Operational Complexity**: [Must limit to what team can manage, e.g., "Avoid Kubernetes if solo developer"]
+- **Technology Choices**: [Must match team skills, e.g., "Stick to Python since that's what we know"]
+- **Scope**: [Must be realistic about what team can build, e.g., "Cannot build complex distributed system with 1 developer"]
+- **Support Model**: [e.g., "Must use managed services since no ops team", "Need excellent documentation for junior devs"]
+- **Pace**: [e.g., "Solo developer → expect 6 months not 2 months", "Small team → simpler architecture"]
 
-**Flexibility**: Limited
-- [Can engage contractors for specific short-term needs (< 3 months)]
-- [Can request training budget for upskilling]
-- [Cannot hire permanent headcount]
+**Growth Options** (if applicable):
+- **Can grow**: [e.g., "Budget approved to hire 2 more devs in Q3"]
+- **Contractors**: [e.g., "Can engage contractors for specific needs (< 3 months)"]
+- **Training**: [e.g., "Budget available for courses/certifications"]
+- **Cannot grow**: [e.g., "Hiring freeze - team size is fixed"]
+
+**Flexibility**: [None | Limited | Moderate]
+- [Document what's possible vs what's not]
 
 ---
 

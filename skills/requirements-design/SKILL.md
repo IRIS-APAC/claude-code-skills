@@ -149,15 +149,16 @@ Every project has constraints that are truly non-negotiable:
 - **Budget hard caps**: "Cannot exceed $50K"
 - **Timeline deadlines**: "Must launch by Q2 (regulatory requirement)"
 - **Technology standards**: "Only approved languages: Python, Java, Go"
-- **Team/resource limits**: "Team fixed at 3 developers, no hiring"
+- **Existing architecture**: "Current system uses PostgreSQL + Redis", "Monolithic Rails app we must integrate with"
+- **Team capacity**: "Solo developer working 20 hrs/week", "Team of 3 with no ops expertise", "Cannot hire more people"
 
 ### How to Capture Constraints
 
 **Ask upfront** (first or second question):
 ```
-"Before we dive in, are there any non-negotiable constraints?
+"Before we dive in, let me understand your constraints and context:
 
-For example:
+**Non-Negotiable Constraints** (hard requirements):
 - Platform: Must use specific cloud provider (Azure vs AWS)?
 - Compliance: Must meet specific standards (GDPR, HIPAA, SOC 2, ISO 27001, PCI-DSS, CPS 234)?
 - Data sovereignty: Must data stay in specific region (EU-only, Australia, no cross-border)?
@@ -167,7 +168,24 @@ For example:
 - Organizational mandates: Required teams, tools, processes (SSO, ServiceNow)?
 - Budget/Timeline: Hard caps or deadlines?
 - Technology: Approved/banned technologies (languages, frameworks)?
-- Team: Fixed team size or hiring constraints?
+
+**Existing Architecture** (what already exists):
+- Current systems: What's already running that we need to integrate with or consider?
+- Technology stack: What technologies are you already using?
+- Data stores: Existing databases, caches, file storage?
+- Infrastructure: Cloud provider, containers, CI/CD, monitoring?
+- Architecture patterns: Monolith, microservices, serverless?
+
+**Team Capacity & Capability** (who's doing the work):
+- Who's building this: Solo developer (you), small team, large organization?
+- If solo: Your skills, availability, areas you want to avoid?
+- If team: Team size, composition, collective skills, gaps?
+- Support available: Can you hire contractors, get help from other teams?
+- Growth options: Can you hire, train, or is team fixed?
+
+**Preferences** (flexible, can be challenged):
+- Technology preferences: Anything you'd *like* to use but it's not required?
+- Architecture preferences: Any approaches you prefer but are open to alternatives?
 
 These will help me provide recommendations that work within your reality."
 ```
