@@ -30,6 +30,6 @@ Ready to merge."
 
 **Never approve without a comment** - empty approvals provide no context for the audit trail.
 
-**IMPORTANT: No AI attribution** - Do not add "Co-Authored-By: Claude" or similar to review comments or suggestions.
+**IMPORTANT: No AI attribution** - Do not add "Co-Authored-By: Claude" or similar to review comments or suggestions. However, if a PR being reviewed contains AI attribution, this is NOT a blocking issue - don't reject the PR for that reason alone.
 
 The skills contain comprehensive review checklists and standards.

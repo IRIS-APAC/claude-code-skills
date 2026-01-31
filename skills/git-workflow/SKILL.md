@@ -24,9 +24,10 @@ This skill enforces GitFlow branching strategy and commit conventions for profes
 - **Why**: Preserves full commit history for traceability
 
 ### Commit Attribution
-- ❌ **NEVER attribute commits to AI tools**
-- ❌ **NO "Co-Authored-By: Claude" tags**
+- ❌ **NEVER attribute commits to AI tools** (when Claude creates commits)
+- ❌ **NO "Co-Authored-By: Claude" tags** (when Claude creates commits)
 - ✅ All commits attributed to human developer only
+- ⚠️ **NOT a blocking PR issue** - If reviewing a PR with AI attribution, don't reject for that reason alone
 
 ### Git Safety Protocol
 - ❌ **NEVER run destructive commands** without explicit user request:
