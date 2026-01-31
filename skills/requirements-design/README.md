@@ -125,9 +125,10 @@ The skill will recommend an approach that determines **document creation order**
 
 **Phase 4: Story Decomposition** (Optional, 1-2 hours)
 - Break requirements into epics (5-10 major feature areas)
-- Decompose epics into stories (5-15 stories per epic)
-- Add acceptance criteria and estimates
-- Sequence stories with dependencies
+- Decompose epics into initial story backlog (high-level stories)
+- Document dependencies and sequencing
+- Create epic catalog structure
+- **Handoff to `/project-management`** for story refinement (acceptance criteria, estimation, sprint planning)
 
 **Phase 5: Technical Pointers** (Optional, ongoing)
 - Add specs and standards references
@@ -265,7 +266,7 @@ The skill includes comprehensive reference materials:
 - **[product-overview-template.md](references/product-overview-template.md)** - Template for high-level vision document
 - **[detailed-requirements-template.md](references/detailed-requirements-template.md)** - Template for comprehensive requirements
 - **[architecture-template.md](references/architecture-template.md)** - Template for system design document
-- **[story-decomposition.md](references/story-decomposition.md)** - Guide for breaking down into epics and stories
+- **[story-decomposition.md](references/story-decomposition.md)** - Guide for initial epic/story breakdown from requirements (handoff to project-management for refinement)
 - **[technical-pointers.md](references/technical-pointers.md)** - Guide for providing implementation guidance
 - **[working-backwards-template.md](references/working-backwards-template.md)** - Amazon's working backwards methodology
 
@@ -339,7 +340,9 @@ You can specify a different location if preferred.
 - Specify logging/metrics
 - Plan for maintainability
 
-## Story Decomposition
+## Story Decomposition (Initial Breakdown)
+
+This skill helps with **initial decomposition** during requirements phase. For **detailed story management** (templates, acceptance criteria, estimation, sprint planning), use `/project-management` skill.
 
 ### Epic Structure
 
@@ -350,30 +353,24 @@ Epics represent major feature areas:
 
 **Typical project has 5-10 epics**
 
-### Story Structure
+### Initial Story List
 
-Stories are implementable units (1-5 days each):
+During requirements phase, create high-level story lists:
 - User story format (As a... I want... So that...)
-- Clear acceptance criteria (3-7 criteria)
-- Technical notes
-- Definition of done
-- Estimated effort (story points or hours)
-- Dependencies
+- High-level scope description
+- Dependencies on other stories
 
 **Typical epic has 5-15 stories**
 
-### Estimation
+### Handoff to Project Management
 
-**Story Points** (Fibonacci scale):
-- 1-2 points: Simple tasks (hours)
-- 3-5 points: Moderate complexity (1-2 days)
-- 8 points: Complex tasks (3-5 days)
-- 13+ points: Too large, break down
-
-**Time-Based** (for waterfall):
-- Include buffer (1.5-2x estimate)
-- Break down by skill level
-- Account for review, testing, docs
+After creating epic catalog with initial story list:
+1. Use `/project-management` to refine stories with:
+   - Detailed acceptance criteria (checkbox format)
+   - T-shirt sizing estimates (XS/S/M/L/XL)
+   - Technical notes and Definition of Done
+2. Use `/agile-board` to create stories on board
+3. Use `/project-management` for sprint planning
 
 ## Technical Pointers
 

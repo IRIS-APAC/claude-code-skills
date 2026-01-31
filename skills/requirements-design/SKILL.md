@@ -90,7 +90,7 @@ Use the structured questionnaire from [references/requirements-gathering.md](ref
 Create all five documents in the order determined by chosen approach. Show drafts and get feedback before moving to next document. Store documents in `docs/Design/` by default.
 
 ### Phase 3: Story Decomposition (Optional)
-Break requirements into epics and user stories. Use guide from [references/story-decomposition.md](references/story-decomposition.md).
+Break requirements into epics and initial story backlog. Create epic catalog. Use guide from [references/story-decomposition.md](references/story-decomposition.md). Then handoff to `/project-management` for detailed story refinement (acceptance criteria, estimation, sprint planning).
 
 ### Phase 4: Technical Pointers (Optional)
 Add specs, standards references, and implementation patterns. Use guide from [references/technical-pointers.md](references/technical-pointers.md).
@@ -1083,7 +1083,7 @@ Throughout this process, reference:
 - [architecture-template.md](references/architecture-template.md) - Architecture template
 - [project-constraints-template.md](references/project-constraints-template.md) - Constraints template
 - [working-backwards-template.md](references/working-backwards-template.md) - Customer Value template
-- [story-decomposition.md](references/story-decomposition.md) - Epic and story creation guide
+- [story-decomposition.md](references/story-decomposition.md) - Initial epic/story breakdown from requirements (handoff to `/project-management` for refinement)
 - [technical-pointers.md](references/technical-pointers.md) - Guide for providing technical references
 
 ## Key Principles
