@@ -132,6 +132,311 @@ This document captures the **non-negotiable constraints** and **guiding principl
 
 ---
 
+#### Principle: [Secure by Design]
+
+**Description**: Security is built into every layer from the start, not added as an afterthought
+
+**Type**: Architecture Principle | Security Philosophy | Non-Negotiable Standard
+
+**Core Principles**:
+
+**1. Design for Zero Secrets (Preferred Approach)**
+- ✅ **PREFER** identity-based authentication with NO secrets at all
+- ✅ Use OIDC (OpenID Connect) federation for cloud access
+- ✅ Use Workload Identity/Managed Identity for service-to-service auth
+- ✅ Use IAM Roles for Service Accounts (IRSA) in Kubernetes
+- **Why**: No secrets means nothing to leak, rotate, or access control
+- **Examples**:
+  - GitHub Actions → Azure: OIDC federation (no Azure Client Secret)
+  - AWS EKS → AWS services: IRSA (no access keys)
+  - GKE → GCP services: Workload Identity (no service account keys)
+  - Azure services → Azure services: Managed Identity (no passwords)
+  - Kubernetes → Cloud APIs: Workload Identity Federation
+- **Benefits**: Zero secrets to manage, no rotation needed, no risk of unauthorized access to secret stores
+
+**2. Use Secret Managers (Fallback Only)**
+- ⚠️ **ONLY** when identity-based auth isn't available (legacy systems, third-party APIs requiring API keys)
+- ✅ Use AWS Secrets Manager, Azure Key Vault, HashiCorp Vault
+- ✅ Rotate credentials regularly (90 days max)
+- ✅ Use short-lived tokens with automatic expiration
+- **Limitation**: Secret managers can be accessed by various people with permissions - prefer zero secrets approach
+
+**3. Never Hardcode or Commit Secrets**
+- ❌ **NEVER** hardcode secrets in code, config files, or environment variables in repos
+- ❌ **NEVER** commit API keys, passwords, tokens, certificates to version control
+- ❌ **NEVER** log sensitive data (passwords, tokens, PII, credit cards)
+
+**2. Principle of Least Privilege**
+- Grant minimum permissions needed (no admin/root unless absolutely required)
+- Use role-based access control (RBAC) with specific roles
+- Service accounts with narrow scopes only
+- Regularly audit and remove unused permissions
+
+**3. Defense in Depth**
+- Multiple layers of security (network, application, data)
+- Assume any layer can be breached
+- Fail securely (deny by default, fail closed not open)
+
+**4. Zero Trust Architecture**
+- Never trust, always verify
+- Verify explicitly (authenticate and authorize every request)
+- Use least privilege access
+- Assume breach (segment access, monitor everything)
+
+**5. Input Validation & Output Encoding**
+- Never trust user input (validate, sanitize, escape)
+- Prevent injection attacks (SQL injection, XSS, command injection)
+- Use parameterized queries, prepared statements
+- Encode output based on context (HTML, JSON, URL)
+
+**Implementation Requirements**:
+
+**Authentication Architecture Decision Tree**:
+```markdown
+1. Can you use identity-based auth?
+   ✅ YES → Use OIDC/Workload Identity/Managed Identity (ZERO SECRETS)
+   ❌ NO → Go to step 2
+
+2. Is this a third-party API that only supports API keys?
+   ✅ YES → Use secret manager (FALLBACK)
+   ❌ NO → Re-evaluate step 1, there's likely an identity-based option
+
+3. Still using passwords/keys/secrets?
+   ⚠️ Document why identity-based auth isn't possible
+   ⚠️ Plan migration to identity-based auth in future
+```
+
+**Code Examples - Zero Secrets Architecture**:
+
+```yaml
+# ✅ BEST: GitHub Actions → Azure (OIDC federation, no secrets)
+# .github/workflows/deploy.yml
+- name: Azure Login
+  uses: azure/login@v1
+  with:
+    client-id: ${{ vars.AZURE_CLIENT_ID }}        # Public, not a secret
+    tenant-id: ${{ vars.AZURE_TENANT_ID }}        # Public, not a secret
+    subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}  # Public, not a secret
+    # NO CLIENT SECRET NEEDED - uses OIDC federation
+
+# ❌ OLD WAY: Using Azure Client Secret (avoid this)
+- name: Azure Login
+  uses: azure/login@v1
+  with:
+    creds: ${{ secrets.AZURE_CREDENTIALS }}  # Secret that can be compromised
+```
+
+```python
+# ✅ BEST: AWS SDK with IAM Role (IRSA in EKS, no secrets)
+import boto3
+
+# No credentials needed - uses IAM role attached to pod/instance
+s3_client = boto3.client('s3')  # Automatically uses IAM role
+s3_client.upload_file('file.txt', 'my-bucket', 'file.txt')
+
+# ❌ OLD WAY: Using access keys (avoid this)
+s3_client = boto3.client(
+    's3',
+    aws_access_key_id='AKIAIOSFODNN7EXAMPLE',      # Secret
+    aws_secret_access_key='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'  # Secret
+)
+```
+
+```python
+# ✅ BEST: Azure SDK with Managed Identity (no secrets)
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+# No secrets needed - uses Managed Identity
+credential = DefaultAzureCredential()
+client = SecretClient(vault_url="https://myvault.vault.azure.net/", credential=credential)
+
+# ❌ OLD WAY: Using client secret (avoid this)
+from azure.identity import ClientSecretCredential
+credential = ClientSecretCredential(
+    tenant_id="tenant-id",
+    client_id="client-id",
+    client_secret="secret-value"  # Secret that can be accessed by people
+)
+```
+
+```python
+# ⚠️ FALLBACK: Third-party API with only API key support
+# Only use secret manager when identity-based auth is NOT available
+
+import boto3
+
+# Fetch from secret manager (better than hardcoding, but not ideal)
+secrets_client = boto3.client('secretsmanager')
+api_secret = secrets_client.get_secret_value(SecretId='prod/third-party-api-key')
+
+# ❌ NEVER DO THIS - Hardcoded secrets
+API_KEY = "sk-1234567890abcdef"  # WRONG!
+DATABASE_URL = "postgresql://user:password123@host/db"  # WRONG!
+
+# ❌ NEVER LOG SECRETS
+logger.info(f"API key: {api_key}")  # WRONG!
+logger.info(f"Password: {password}")  # WRONG!
+
+# ✅ CORRECT - Log safely
+logger.info("Third-party API connection established")  # No credentials
+logger.info(f"User {user_id} authenticated")  # No password/token
+```
+
+**Security Checklist**:
+
+**Authentication Architecture**:
+- [ ] Prefer identity-based auth (OIDC, Workload Identity, Managed Identity, IAM Roles)
+- [ ] Document why any secrets/API keys are necessary (when identity-based auth isn't available)
+- [ ] Zero secrets for cloud provider access (GitHub Actions → Azure/AWS/GCP via OIDC)
+- [ ] Zero secrets for service-to-service auth within cloud (Managed Identity, IRSA, Workload Identity)
+- [ ] If using secrets: stored in secret management system (never in code/config)
+- [ ] If using secrets: rotation automated (max 90 days)
+
+**Secret Protection**:
+- [ ] Secrets never logged (check all log statements)
+- [ ] Secrets never in error messages (even in dev/staging)
+- [ ] `.gitignore` includes `.env`, `secrets/`, credentials files
+- [ ] Pre-commit hooks scan for secrets (git-secrets, trufflehog, gitleaks)
+- [ ] CI/CD pipeline fails if secrets detected in commits
+
+**Application Security**:
+- [ ] All database queries use parameterized queries (no string concatenation)
+- [ ] All user input validated and sanitized
+- [ ] All API endpoints have authentication and authorization
+- [ ] HTTPS everywhere (no HTTP, even in dev)
+- [ ] Security headers configured (CSP, HSTS, X-Frame-Options)
+- [ ] Rate limiting on all public endpoints
+- [ ] Principle of least privilege for all service accounts
+
+**DevSecOps**:
+- [ ] Regular dependency updates (automated via Dependabot/Renovate)
+- [ ] Security scanning in CI/CD (SAST, dependency scanning)
+- [ ] Container image scanning (if using containers)
+- [ ] Infrastructure as Code (IaC) security scanning (Checkov, tfsec)
+
+**Data Protection**:
+```markdown
+**Encryption**:
+- At rest: All databases, S3 buckets, volumes encrypted
+- In transit: HTTPS/TLS 1.2+ for all network traffic
+- Keys: Managed by cloud provider KMS (never self-managed)
+
+**Sensitive Data Handling**:
+- PII: Encrypted at rest, access logged, GDPR compliance
+- Passwords: Hashed with bcrypt/Argon2 (NEVER store plaintext)
+- Credit cards: Never store (use Stripe, payment gateway handles it)
+- Tokens: Short-lived (1 hour max), refresh token rotation
+```
+
+**Authentication & Authorization**:
+```markdown
+**Authentication**:
+- Use established protocols: OAuth 2.0, OIDC, SAML 2.0
+- MFA enforced for admin/privileged access
+- Password requirements: min 12 chars, complexity rules
+- Account lockout after failed attempts (5 attempts → 15 min lockout)
+
+**Authorization**:
+- Role-based access control (RBAC) with defined roles
+- Attribute-based access control (ABAC) for complex permissions
+- API endpoints: Check both authentication AND authorization
+- Database: Row-level security for multi-tenant data
+```
+
+**Security Tools & Automation**:
+```markdown
+**Development**:
+- Pre-commit hooks: git-secrets, trufflehog (detect secrets before commit)
+- IDE plugins: Security linters (Semgrep, SonarLint)
+- Dependency scanning: Dependabot, Snyk, npm audit
+
+**CI/CD**:
+- SAST: Static application security testing (Semgrep, CodeQL)
+- Dependency scanning: Check for vulnerable dependencies
+- Secret scanning: Fail build if secrets detected
+- Container scanning: Scan Docker images (Trivy, Snyk)
+
+**Runtime**:
+- WAF: Web application firewall (AWS WAF, Cloudflare)
+- RASP: Runtime application self-protection
+- Intrusion detection: Monitor for attacks
+- Security monitoring: SIEM (Splunk, DataDog Security)
+```
+
+**Incident Response**:
+```markdown
+**Preparation**:
+- Security runbook documented
+- Incident response team identified
+- Contact list (security team, legal, PR)
+
+**Detection**:
+- Security alerts configured (failed auth, unusual traffic)
+- Log aggregation and analysis (CloudWatch, DataDog)
+- Intrusion detection system (IDS)
+
+**Response**:
+- Isolate affected systems
+- Preserve evidence (logs, snapshots)
+- Rotate all potentially compromised credentials
+- Notify affected users (GDPR: 72 hours)
+- Post-incident review and remediation
+```
+
+**Rationale**:
+- Security breaches cost millions (data, reputation, legal penalties)
+- Easier to build security in than bolt it on later
+- Compliance requirements (GDPR, SOC 2, PCI-DSS) mandate security
+- Customer trust depends on protecting their data
+- Security incidents can destroy businesses
+
+**Impact on Design**:
+- Architecture: Design for security from day one
+- Code reviews: Security-focused reviews required
+- Dependencies: Only use well-maintained, secure libraries
+- Testing: Security testing (SAST, DAST, penetration testing)
+- Deployment: Automated security checks in CI/CD pipeline
+- Monitoring: Security monitoring and alerting required
+
+**Flexibility**: None (non-negotiable)
+- Security principles cannot be compromised for speed or convenience
+- Security exceptions require executive approval + risk assessment
+
+**Common Mistakes to Avoid**:
+```markdown
+❌ "We'll add security later" → No, security is foundational
+❌ "It's just a dev/staging environment" → Still must be secure
+❌ "We're too small to be targeted" → Automated attacks target everyone
+❌ "The firewall protects us" → Defense in depth required
+❌ "I'll just commit this API key temporarily" → Never, use .env.local
+❌ "Logging the full request helps debugging" → Redact sensitive data first
+❌ "admin/admin for local development is fine" → Use proper auth always
+```
+
+**Examples**:
+```
+✅ Good: "API keys stored in AWS Secrets Manager, fetched at startup, rotated every 90 days. Pre-commit hooks scan for secrets."
+
+✅ Good: "All user input validated with Joi schema validation before processing. SQL queries use parameterized statements only."
+
+✅ Good: "Database encrypted at rest (AES-256), TLS 1.3 for all traffic, passwords hashed with Argon2."
+
+❌ Bad: "API keys in .env file committed to Git for convenience."
+
+❌ Bad: "SQL query built with string concatenation: 'SELECT * FROM users WHERE id=' + user_input"
+
+❌ Bad: "Logging full request body including passwords for debugging."
+```
+
+**Resources**:
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [CWE Top 25 Most Dangerous Software Weaknesses](https://cwe.mitre.org/top25/)
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+
+---
+
 ### 3. Compliance & Security Requirements
 
 #### Constraint: [e.g., "Must comply with GDPR"]

@@ -140,7 +140,8 @@ You must **challenge, research, and suggest** throughout the requirements proces
 
 Every project has constraints that are truly non-negotiable:
 - **Platform mandates**: "Must use Azure" or "AWS only"
-- **Architecture principles**: "Reuse over Buy over Build"
+- **Architecture principles**: "Reuse over Buy over Build", "Secure by Design"
+- **Security principles**: "Never store secrets in code/config", "Use secret managers", "Encrypt all data", "Principle of least privilege"
 - **Compliance requirements**: "Must meet GDPR, HIPAA, SOC 2, ISO 27001, PCI-DSS, CPS 234"
 - **Data sovereignty**: "All data must remain in EU", "No cross-border data transfers"
 - **Organizational mandates**: "Must use enterprise SSO" or "Must integrate with ServiceNow"
@@ -160,12 +161,13 @@ Every project has constraints that are truly non-negotiable:
 
 **Non-Negotiable Constraints** (hard requirements):
 - Platform: Must use specific cloud provider (Azure vs AWS)?
+- Security: Secure by Design principles (prefer zero secrets via OIDC/Managed Identity, never hardcode credentials, encrypt data)?
 - Compliance: Must meet specific standards (GDPR, HIPAA, SOC 2, ISO 27001, PCI-DSS, CPS 234)?
 - Data sovereignty: Must data stay in specific region (EU-only, Australia, no cross-border)?
 - Source control: Which system and organization (GitHub Enterprise, GitLab, Azure DevOps)?
 - Documentation: Where should docs be stored (repo, Confluence, SharePoint)?
 - Language/Locale: What written language/dialect (Australian English, US English, British English)? Date/time formats?
-- Architecture principles: Any guiding principles (e.g., 'Reuse over Buy over Build')?
+- Architecture principles: Any guiding principles (e.g., 'Reuse over Buy over Build', 'Secure by Design')?
 - Organizational mandates: Required teams, tools, processes (SSO, ServiceNow)?
 - Budget/Timeline: Hard caps or deadlines?
 - Technology: Approved/banned technologies (languages, frameworks)?
