@@ -452,6 +452,116 @@ Access: Engineering team (write), Security team (read), Contractors (read on spe
 
 ---
 
+#### Constraint: [Language & Localization Standards]
+
+**Description**: Written language, dialect, and localization standards for all content
+
+**Type**: Style Guide | Organizational Standard | User Experience Requirement
+
+**Language & Dialect**:
+- **Primary Language**: [e.g., "Australian English (en-AU)", "US English (en-US)", "British English (en-GB)"]
+- **Code & Documentation**: [e.g., "Australian English spelling throughout"]
+- **User-Facing Content**: [e.g., "Australian English for AU users, US English for US users"]
+- **Variable Naming**: [e.g., "Use Australian spelling in code (colour, initialise, organisation)"]
+
+**Rationale**:
+- [Consistency across all documentation and code]
+- [Matches organization's location and customer base (Australia)]
+- [Aligns with brand voice and customer expectations]
+- [Reduces confusion from mixed spelling (color vs colour)]
+
+**Specific Requirements**:
+
+**Spelling Standards**:
+- ✅ **Use**: colour, initialise, organisation, centre, analyse, licence (noun)
+- ❌ **Avoid**: color, initialize, organization, center, analyze, license (noun)
+
+**Code Examples**:
+```python
+# ✅ Australian English in code
+class UserOrganisation:
+    def initialise_colour_scheme(self):
+        self.colour = "blue"
+        self.centre_alignment = True
+
+# ❌ US English (inconsistent with standard)
+class UserOrganization:
+    def initialize_color_scheme(self):
+        self.color = "blue"
+        self.center_alignment = True
+```
+
+**Documentation Standards**:
+- **Technical docs**: Australian English spelling
+- **Code comments**: Australian English spelling
+- **API documentation**: Australian English for field names and descriptions
+- **Error messages**: Australian English phrasing
+- **User interface text**: Australian English
+
+**Date & Time Formats**:
+- **Date format**: [e.g., "DD/MM/YYYY (31/01/2026)" for Australian, "MM/DD/YYYY" for US]
+- **Time format**: [e.g., "24-hour (14:30)" or "12-hour (2:30 PM)"]
+- **Timezone**: [e.g., "AEST/AEDT (Australia/Sydney)", "UTC", "User's local timezone"]
+
+**Number Formats**:
+- **Decimal separator**: [e.g., "Period/full stop (1,234.56)" or "Comma (1.234,56)"]
+- **Thousand separator**: [e.g., "Comma (1,234.56)" or "Space (1 234.56)"]
+- **Currency**: [e.g., "AUD ($1,234.56)", "USD ($1,234.56)", "EUR (€1.234,56)"]
+
+**Impact on Design**:
+- [All developers must use Australian English in code and docs]
+- [Code linters should check spelling (e.g., codespell with en-AU dictionary)]
+- [UI components must format dates/times according to locale]
+- [APIs must accept and return localized date/time formats]
+- [Translation strategy if multi-language support needed later]
+
+**Tools & Enforcement**:
+- **Spell checker**: [e.g., "VS Code with Australian English dictionary"]
+- **Linter**: [e.g., "codespell configured for en-AU"]
+- **Style guide**: [e.g., "Link to organization's style guide"]
+- **PR reviews**: [e.g., "Reviewers check for language consistency"]
+
+**Flexibility**: Low (organizational standard)
+- [Exception for technical terms that are always US English (e.g., "color" in CSS/HTML)]
+- [Exception for third-party library names and APIs (use their naming)]
+
+**Common Exceptions**:
+```
+✅ Technical terms that remain US English:
+- CSS properties: color, center, gray (not colour, centre, grey)
+- HTML attributes: color, center
+- Library names: tensorflow, colorama (use their spelling)
+
+✅ Australian English everywhere else:
+- Variable names: user_colour, initialise_app(), organisation_settings
+- Documentation: "The colour picker initialises on page load"
+- Comments: "Initialise the organisation's colour scheme"
+```
+
+**Examples**:
+```
+✅ Good (Consistent Australian English):
+"The application initialises the user's colour preferences from their organisation settings."
+
+Variable: user_colour_scheme
+Function: initialise_organisation()
+Comment: # Initialise colour values for the organisation
+
+❌ Bad (Mixed US/Australian English):
+"The application initializes the user's color preferences from their organisation settings."
+
+Variable: user_color_scheme (US)
+Function: initialise_organization() (mixed)
+Comment: # Initialize colour values for the organization (mixed)
+```
+
+**Verification**:
+- [Code review checks for language consistency]
+- [Automated spell checking in CI/CD pipeline]
+- [Style guide compliance verification]
+
+---
+
 ### 6. Budget & Resource Constraints
 
 #### Constraint: [Budget Cap]

@@ -164,6 +164,7 @@ Every project has constraints that are truly non-negotiable:
 - Data sovereignty: Must data stay in specific region (EU-only, Australia, no cross-border)?
 - Source control: Which system and organization (GitHub Enterprise, GitLab, Azure DevOps)?
 - Documentation: Where should docs be stored (repo, Confluence, SharePoint)?
+- Language/Locale: What written language/dialect (Australian English, US English, British English)? Date/time formats?
 - Architecture principles: Any guiding principles (e.g., 'Reuse over Buy over Build')?
 - Organizational mandates: Required teams, tools, processes (SSO, ServiceNow)?
 - Budget/Timeline: Hard caps or deadlines?
