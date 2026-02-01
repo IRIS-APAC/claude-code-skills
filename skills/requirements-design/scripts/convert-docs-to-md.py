@@ -21,6 +21,7 @@ Supported formats:
     - .pptx (PowerPoint presentations) → Markdown (slide text)
     - .odt (OpenDocument text) → Markdown
     - .rtf (Rich Text Format) → Markdown
+    - .vtt (WebVTT video transcripts) → Markdown
 
 Requirements:
     - pandoc (primary converter)
@@ -50,6 +51,7 @@ class DocumentConverter:
         '.rtf': 'Rich Text Format',
         '.html': 'HTML Document',
         '.htm': 'HTML Document',
+        '.vtt': 'WebVTT Video Transcript',
     }
 
     def __init__(self, keep_original: bool = True, overwrite: bool = False,
@@ -131,6 +133,8 @@ class DocumentConverter:
             return self._convert_excel(input_file, output_file)
         elif ext in ['.pptx', '.ppt']:
             return self._convert_powerpoint(input_file, output_file)
+        elif ext == '.vtt':
+            return self._convert_vtt(input_file, output_file)
         else:
             self._print(f"❌ No converter available for: {ext}", force=True)
             return False
@@ -301,6 +305,79 @@ class DocumentConverter:
 
         except Exception as e:
             self._print(f"❌ PowerPoint conversion failed: {e}", force=True)
+            return False
+
+    def _convert_vtt(self, input_file: Path, output_file: Path) -> bool:
+        """Convert WebVTT video transcript to Markdown"""
+        import re
+
+        try:
+            with open(input_file, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(f"# {input_file.stem}\n\n")
+                f.write("*Converted from WebVTT video transcript*\n\n")
+                f.write("---\n\n")
+
+                # Parse VTT format
+                # VTT format:
+                # WEBVTT
+                #
+                # 00:00:05.000 --> 00:00:08.000
+                # Welcome to the meeting.
+                #
+                # 00:00:08.500 --> 00:00:12.000
+                # Today we'll discuss requirements.
+
+                # Split into blocks (separated by blank lines)
+                blocks = re.split(r'\n\n+', content)
+
+                for block in blocks:
+                    block = block.strip()
+
+                    # Skip WEBVTT header and empty blocks
+                    if not block or block.startswith('WEBVTT') or block.startswith('NOTE'):
+                        continue
+
+                    # Check if block has timestamp
+                    lines = block.split('\n')
+
+                    # Look for timestamp line (format: 00:00:05.000 --> 00:00:08.000)
+                    timestamp_pattern = r'(\d{2}:\d{2}:\d{2}[.,]\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2}[.,]\d{3})'
+
+                    timestamp_line = None
+                    text_lines = []
+
+                    for line in lines:
+                        if re.match(timestamp_pattern, line):
+                            # Extract start time for reference
+                            match = re.match(timestamp_pattern, line)
+                            if match:
+                                start_time = match.group(1).replace(',', '.')
+                                # Convert to simpler format (HH:MM:SS)
+                                time_parts = start_time.split(':')
+                                if time_parts[0] == '00':  # Less than 1 hour
+                                    timestamp_line = f"{time_parts[1]}:{time_parts[2].split('.')[0]}"
+                                else:
+                                    timestamp_line = f"{time_parts[0]}:{time_parts[1]}:{time_parts[2].split('.')[0]}"
+                        elif not line.isdigit():  # Skip cue numbers
+                            text_lines.append(line)
+
+                    # Write formatted entry
+                    if text_lines:
+                        text = ' '.join(text_lines).strip()
+                        if text:
+                            if timestamp_line:
+                                f.write(f"**[{timestamp_line}]** {text}\n\n")
+                            else:
+                                f.write(f"{text}\n\n")
+
+            self._print(f"✅ Converted: {output_file.name}")
+            return True
+
+        except Exception as e:
+            self._print(f"❌ VTT conversion failed: {e}", force=True)
             return False
 
     def convert_folder(self, input_folder: Path, output_folder: Path,

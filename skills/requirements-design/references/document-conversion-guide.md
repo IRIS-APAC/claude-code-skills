@@ -85,6 +85,7 @@ python convert-docs-to-md.py --supported-formats
 | `.odt` | OpenDocument | pandoc |
 | `.rtf` | Rich Text Format | pandoc |
 | `.html` | HTML Document | pandoc |
+| `.vtt` | WebVTT Video Transcript | Built-in parser |
 
 ---
 
@@ -302,6 +303,58 @@ Bullet points
 - Speaker notes (may be included depending on tool)
 
 **Tip**: For diagram-heavy presentations, screenshot key slides and reference separately.
+
+### Video Transcripts (.vtt)
+
+**Converts WebVTT format to readable markdown** - creates:
+```markdown
+# Meeting Recording
+
+*Converted from WebVTT video transcript*
+
+---
+
+**[00:05]** Welcome to the requirements review meeting.
+
+**[00:08]** Today we'll discuss the livestock allocation system.
+
+**[00:15]** The main goal is to optimize livestock assignment based on customer requirements.
+
+**[01:30]** Key constraints include delivery schedules and animal welfare standards.
+```
+
+**Features:**
+- Preserves timestamps for reference
+- Removes VTT metadata and cue numbers
+- Consolidates text into readable paragraphs
+- Simplified timestamp format (MM:SS or HH:MM:SS)
+
+**Use Cases:**
+- ✅ Teams meeting transcripts from SharePoint
+- ✅ Recorded requirements sessions
+- ✅ Client interview recordings
+- ✅ Design review meetings
+
+**Example workflow:**
+```bash
+# Download Teams recording folder from SharePoint
+python sharepoint-access.py \
+  --url "<meeting-folder-url>" \
+  --action download \
+  --output ./docs/Reference/Original/
+
+# Convert transcript
+python convert-docs-to-md.py \
+  --file ./docs/Reference/Original/Meeting-Recording.vtt
+
+# Result: Meeting-Recording.md with readable transcript
+```
+
+**Tip**: Meeting transcripts are valuable for capturing:
+- Discussed requirements and constraints
+- Client questions and clarifications
+- Design decisions and rationale
+- Action items and follow-ups
 
 ---
 
