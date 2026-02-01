@@ -89,6 +89,15 @@ Use the structured questionnaire from [references/requirements-gathering.md](ref
 ### Phase 2: Document Creation
 Create all five documents in the order determined by chosen approach. Show drafts and get feedback before moving to next document. Store documents in `docs/Design/` by default.
 
+**Before presenting each document to user:**
+1. **Red Team Review**: Review your own work as a skeptical CTO/CFO
+   - What assumptions did I make that aren't validated?
+   - What alternatives didn't I explore?
+   - What risks haven't I called out?
+   - What could go wrong with this approach?
+2. **Assumption Validation**: List assumptions explicitly for user to confirm
+3. **Present concerns**: "Here are things I'm concerned about that we should discuss..."
+
 ### Phase 3: Story Decomposition (Optional)
 Break requirements into epics and initial story backlog. Create epic catalog. Use guide from [references/story-decomposition.md](references/story-decomposition.md). Then handoff to `/project-management` for detailed story refinement (acceptance criteria, estimation, sprint planning).
 
@@ -132,6 +141,115 @@ You must **challenge, research, and suggest** throughout the requirements proces
 
 **See [examples-and-patterns.md](references/examples-and-patterns.md) for detailed examples of challenging, researching, and suggesting.**
 
+### When to Challenge: Red Flags (Not Arbitrary Quotas)
+
+**RED FLAG** triggers requiring research/validation:
+
+1. **🚩 Build vs Buy Not Explored**
+   - User proposes custom solution without mentioning existing products
+   - **Action**: `WebSearch: "[industry] [use case] software solutions 2026"`
+   - **Example**: "livestock allocation optimization software 2026"
+   - Present top 3 SaaS/platforms with pricing vs build estimate
+
+2. **🚩 Technology Choice Without Rationale**
+   - User specifies technology ("use Python") without explaining why
+   - **Action**: `WebSearch: "[technology] vs alternatives for [use case] 2026"`
+   - **Example**: "Python vs Julia for optimization workloads 2026"
+   - Present performance benchmarks, pros/cons
+
+3. **🚩 Vague Timeline/Budget**
+   - "6 months" or "$100K-$500K" without breakdown
+   - **Action**: `WebSearch: "[similar project] development timeline/cost 2026"`
+   - Ask for specific breakdown: phases, resources, buffer
+   - Validate against industry benchmarks
+
+4. **🚩 Integration Risk Not De-Risked**
+   - Required integration with unvalidated API/system
+   - **Action**: Create integration risk table and propose spike
+   - **Questions for each integration**:
+     - Does API/interface exist? Documented?
+     - Read-only or write-back required?
+     - Authentication? Access already granted?
+     - Error handling? Retry logic?
+     - Rate limits? Performance requirements?
+
+   **Integration Risk Table Format**:
+   ```
+   | Integration      | Risk Level | Status    | Questions                          | De-Risk Plan                    |
+   |------------------|------------|-----------|------------------------------------|---------------------------------|
+   | Rep App API      | HIGH       | Unknown   | API exists? Schema? Access?        | Spike: 1 week to test BEFORE P1 |
+   | Livestock System | HIGH       | Unknown   | Write-back API? Import? Access?    | Spike: 1 week to test BEFORE P1 |
+   | Auth Provider    | MEDIUM     | Confirmed | OIDC support confirmed via docs    | Standard OIDC implementation    |
+   ```
+
+   **Always propose integration spike (1-2 weeks) BEFORE Phase 1 if any integration is HIGH risk/unknown**
+
+5. **🚩 Operational Capacity Unclear**
+   - "Flexible team capacity" or "TBD" for who maintains
+   - **Action**: Get specifics: How many people? Hours/week? Skills? Training plan?
+
+6. **🚩 Assumptions Not Validated**
+   - Technical assumptions presented as facts
+   - **Action**: List assumptions explicitly, ask user to validate each
+
+**Challenge intelligently where it matters, not arbitrarily.**
+
+### Research Templates (Make WebSearch Easy)
+
+When red flags appear, use these research patterns:
+
+```
+Build vs Buy:
+WebSearch: "[industry] [problem] software 2026"
+WebSearch: "[specific capability] SaaS platforms 2026"
+
+Technology Validation:
+WebSearch: "[tech A] vs [tech B] for [use case] 2026"
+WebSearch: "[technology] performance benchmarks 2026"
+
+Timeline/Budget Benchmarks:
+WebSearch: "[project type] development timeline 2026"
+WebSearch: "[similar system] implementation cost 2026"
+
+Integration Risk:
+WebSearch: "[system name] API documentation"
+WebSearch: "[system name] integration examples"
+```
+
+### Assumption Validation (Before Finalizing)
+
+**Before finalizing constraints or documents**, explicitly show user your assumptions:
+
+```
+"Before I finalize [constraints/requirements/architecture], here are assumptions I'm making - please correct any that are wrong:
+
+**Timeline Assumptions:**
+- ✓/✗ 6 months is realistic because [reasoning based on team size, scope]
+- ✓/✗ No hard deadline, timeline is flexible
+
+**Budget Assumptions:**
+- ✓/✗ $100K-$500K covers [specific breakdown: $X infrastructure, $Y development, $Z buffer]
+- ✓/✗ Budget can flex if needed with approval
+
+**Team Assumptions:**
+- ✓/✗ "Flexible capacity" means [X people, Y hours/week availability]
+- ✓/✗ Team has skills in [technologies] or can learn
+
+**Technical Assumptions:**
+- ✓/✗ Python performance is sufficient for [specific workload: 10K records in <5 min]
+  - STATUS: VALIDATED (via WebSearch benchmark) / ASSUMED (needs spike)
+- ✓/✗ Rep App API exists and supports [specific operations]
+  - STATUS: CONFIRMED / UNKNOWN (needs spike to validate)
+
+**Integration Assumptions:**
+- ✓/✗ Livestock System supports write-back via [API/Import/Manual]
+  - STATUS: CONFIRMED / UNKNOWN (propose 1-week spike)
+
+Which assumptions are wrong? Which need validation before we proceed?"
+```
+
+**Purpose**: Catch misunderstandings early before investing time in wrong direction.
+
 ## Constraints & Reusability
 
 ### Capturing Non-Negotiable Constraints
@@ -166,7 +284,13 @@ Every project has constraints that are truly non-negotiable:
 - Data sovereignty: Must data stay in specific region (EU-only, Australia, no cross-border)?
 - Source control: Which system and organization (GitHub Enterprise, GitLab, Azure DevOps)?
 - Documentation: Where should docs be stored (repo, Confluence, SharePoint)?
-- Language/Locale: What written language/dialect (Australian English, US English, British English)? Date/time formats?
+- **Language/Locale**: What written language/dialect? (Australian English, US English, British English)
+  - Date/time formats? (DD/MM/YYYY vs MM/DD/YYYY)
+  - Currency? (AUD, USD, GBP, EUR)
+  - Number formats? (1,000.50 vs 1.000,50)
+- **Accessibility**: WCAG compliance level? (A, AA, AAA) Screen reader support required?
+- **Regulatory (Industry-Specific)**: Industry regulations? (HACCP for food, APRA for finance, etc.)
+- **Operational Capacity**: Who maintains post-launch? What skills do they have? What training is needed?
 - Architecture principles: Any guiding principles (e.g., 'Reuse over Buy over Build', 'Secure by Design')?
 - Organizational mandates: Required teams, tools, processes (SSO, ServiceNow)?
 - Budget/Timeline: Hard caps or deadlines?
