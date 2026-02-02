@@ -33,13 +33,18 @@ You should actively use tools to research:
    - File: `customer-value-{project-name}.md`
    - Template: [working-backwards-template.md](references/working-backwards-template.md)
 
-3. **Solution Design** - High-Level Delivery Approach
+3. **Solution Design** - High-Level End-to-End Architecture
    - Problem statement, solution overview, key design decisions
-   - Explains HOW we'll deliver value: approach, architecture philosophy, trade-offs
+   - End-to-end architecture with multiple diagram types (component, sequence, deployment)
+   - Technology choices with rationale (alternatives considered, trade-offs)
+   - Data flows showing how components interact
+   - Integration examples and operational considerations
+   - Explains HOW we'll deliver value at the architecture level
    - Bridges business context and technical implementation
    - Audience: Technical stakeholders, architects, engineering teams, product managers
-   - File: `solution-design-{project-name}.md`
+   - File: `solution-design-{project-name}.md` or `end-to-end-architecture-{project-name}.md`
    - Template: [product-overview-template.md](references/product-overview-template.md)
+   - **Gold Standard Example:** See funnelback's `end-to-end-solution-architecture.md`
 
 4. **Requirements** - Detailed Specifications
    - Comprehensive functional and non-functional requirements
@@ -49,11 +54,17 @@ You should actively use tools to research:
    - File: `requirements-{project-name}.md`
    - Template: [detailed-requirements-template.md](references/detailed-requirements-template.md)
 
-5. **Architecture** - Technical Blueprint
-   - Component diagrams and system architecture
-   - Service boundaries, module structure, deployment strategy
-   - API contracts, data flows, technology choices with rationale
-   - Implementation-ready technical design
+5. **Architecture** - Detailed Technical Blueprint
+   - Detailed component architecture and implementation specifications
+   - Service boundaries, module structure, class diagrams, deployment strategy
+   - API contracts with full request/response schemas
+   - Database schemas, data models, migration strategies
+   - Security implementation details (authentication, authorization, encryption)
+   - Monitoring, logging, alerting implementation
+   - Technology choices with rationale (alternatives, trade-offs)
+   - Operational considerations (scaling, DR, cost optimization)
+   - Implementation-ready technical design with code examples
+   - More detailed than Solution Design - includes implementation-level specifications
    - File: `architecture-{project-name}.md`
    - Template: [architecture-template.md](references/architecture-template.md)
 
@@ -62,6 +73,7 @@ You should actively use tools to research:
 - **Different Audiences**: Customer Value for business, Solution Design bridges both, Requirements/Architecture for technical teams
 - **Complete Picture**: Value proposition + Delivery approach + Detailed specs + Implementation blueprint
 - **Cross-referencing**: Documents reinforce and link to each other
+- **Two Levels of Architecture**: Solution Design (high-level end-to-end overview for stakeholders) + Architecture (detailed implementation specs for developers)
 
 **The approach determines ORDER, not which documents exist:**
 - **Customer-First**: Constraints → Customer Value → Solution Design → Requirements → Architecture
@@ -84,7 +96,17 @@ You should actively use tools to research:
 3. Explore existing systems, constraints, and dependencies
 4. Clarify scope, timeline, and phasing strategy
 
-Use the structured questionnaire from [references/requirements-gathering.md](references/requirements-gathering.md). Ask questions progressively, not all at once. Use the AskUserQuestion tool for key decisions.
+Use the structured questionnaire from [references/requirements-gathering.md](references/requirements-gathering.md). Ask questions progressively, not all at once.
+
+**REQUIRED: You MUST use the AskUserQuestion UI tool for all option-based questions** - it provides a much better experience than text-based questions. Use it for:
+- Choosing between approaches (Customer-First vs Technical-First)
+- Technology selections and build vs buy decisions
+- Prioritization questions (MoSCoW, feature ranking)
+- Trade-off decisions (cost vs timeline, simplicity vs features)
+- Any scenario where you're presenting discrete options for the user to choose from
+- Multi-select scenarios (use `multiSelect: true` parameter)
+
+The UI tool makes it easier for users to understand options and make informed decisions. Only use text for open-ended narrative questions.
 
 ### Phase 2: Document Creation
 Create all five documents in the order determined by chosen approach. Show drafts and get feedback before moving to next document. Store documents in `docs/Design/` by default.
@@ -670,55 +692,364 @@ Capture in constraints document:
 
 ## Document Quality Standards
 
-Your documentation should meet these standards (learned from production projects):
+Your documentation should meet these standards (learned from world-class production projects):
 
-### 1. Clear Visual Communication
-- Use ASCII diagrams liberally to illustrate architecture
-- Include data flow diagrams showing how information moves
-- Provide component diagrams showing service boundaries
-- Use tables for comparisons and structured data
+### 1. Document Metadata & Structure
 
-### 2. Decision Rationale
-- For every significant design choice, explain WHY
-- Show alternatives considered and why they were rejected
-- Use comparison tables to evaluate options
-- Make trade-offs explicit
+**Every major document should start with:**
+```markdown
+# [Document Title]
 
-### 3. Concrete Examples
-- Don't just describe schemas - show actual JSON examples
-- Include example API requests and responses
-- Provide sample configurations
-- Show concrete code patterns
+**Document Version:** 1.0
+**Last Updated:** YYYY-MM-DD
+**Audience:** [Technical teams, stakeholders, both]
+**Purpose:** [One-sentence description]
 
-### 4. Cost and Performance Analysis
-- Estimate storage and compute costs
-- Provide performance targets with rationale
-- Show cost comparisons between approaches
-- Include scaling projections
+---
 
-### 5. Progressive Detail
+## Executive Summary
+
+[2-3 paragraphs summarizing key points and decisions]
+
+**Key Design Principles:**
+1. [Principle 1]
+2. [Principle 2]
+3. [Principle 3]
+```
+
+**Why:** Provides context upfront, helps readers understand relevance, enables version tracking
+
+### 2. Multiple Mermaid Diagram Types
+
+**Use different diagram types for different purposes:**
+
+**Architecture Overview (Component View):**
+```mermaid
+graph TB
+    subgraph "Consumer Layer"
+        UI[User Interface]
+    end
+
+    subgraph "Service Layer"
+        API[API Gateway]
+        SVC[Service Logic]
+    end
+
+    subgraph "Infrastructure Layer"
+        DB[Database]
+        CACHE[Cache]
+    end
+
+    UI --> API
+    API --> SVC
+    SVC --> DB
+    SVC --> CACHE
+
+    style UI fill:#5dade2,stroke:#1f618d,stroke-width:2px,color:#000
+    style API fill:#58d68d,stroke:#27ae60,stroke-width:2px,color:#000
+    style SVC fill:#58d68d,stroke:#27ae60,stroke-width:2px,color:#000
+    style DB fill:#af7ac5,stroke:#7d3c98,stroke-width:2px,color:#000
+    style CACHE fill:#af7ac5,stroke:#7d3c98,stroke-width:2px,color:#000
+```
+
+**Data Flow (Sequence Diagram):**
+```mermaid
+sequenceDiagram
+    participant User
+    participant API
+    participant Service
+    participant Database
+
+    User->>API: POST /search
+    API->>Service: Process query
+    Service->>Database: Fetch results
+    Database-->>Service: Data
+    Service-->>API: Results
+    API-->>User: 200 OK
+```
+
+**Deployment Architecture:**
+```mermaid
+graph TB
+    subgraph "AWS Account"
+        subgraph "VPC"
+            ALB[Load Balancer]
+            ECS[ECS Fargate]
+        end
+        S3[S3 Bucket]
+        RDS[RDS Database]
+    end
+
+    USER[Users] -->|HTTPS| ALB
+    ALB --> ECS
+    ECS --> S3
+    ECS --> RDS
+```
+
+**Color-Coding Convention (High Contrast):**
+- Consumer/User Layer: Blue (#5dade2 fill, #1f618d stroke) - Clear contrast for user-facing components
+- Integration Layer: Orange (#f39c12 fill, #d68910 stroke) - Stands out as the connection layer
+- Service Layer: Green (#58d68d fill, #27ae60 stroke) - Distinct from infrastructure
+- Infrastructure Layer: Purple (#af7ac5 fill, #7d3c98 stroke) - Clearly separates managed services
+- Data Sources: Coral (#ec7063 fill, #c0392b stroke) - High visibility for external systems
+
+**Use format:** `style NodeName fill:#58d68d,stroke:#27ae60,stroke-width:2px,color:#000`
+**Text color:** Always use `color:#000` (black) for readability on all backgrounds
+
+**Why:** Different diagrams serve different purposes - components show structure, sequences show flows, deployment shows infrastructure
+
+### 3. Data Flow Diagrams (Distinct from Architecture)
+
+**Architecture shows COMPONENTS, Data Flows show INTERACTIONS**
+
+For every major user flow, include a sequence diagram with:
+- Numbered steps
+- Clear participant labels
+- Both request and response arrows
+- Error/auth flows if relevant
+
+**Example:**
+```markdown
+### Search Query Flow (User → Response)
+
+[Sequence diagram showing 10+ steps from user query to response]
+
+**Key Steps:**
+1. User asks question in AI platform
+2. Platform calls Search API with query + context
+3. JWT validation - extract user identity + groups
+4. Query normalization
+5. Hybrid search (BM25 + vector) with ACL filtering
+6. Content retrieval
+7. Results returned (permission-filtered)
+8. Platform generates answer
+9. Metrics logged
+
+**Data Permissioning:** Users only see documents they have access to...
+```
+
+**Why:** Shows HOW the system works, not just WHAT it contains
+
+### 4. Technology Decision Justification
+
+**For EVERY significant technology choice, include:**
+
+```markdown
+## Key Technology Decisions
+
+### Why [Technology X]?
+
+**Alternative Considered:** [Technology Y]
+
+**Decision:** [Technology X]
+
+**Rationale:**
+- Specific reason 1 (with metrics/data)
+- Specific reason 2 (with metrics/data)
+- Specific reason 3 (with metrics/data)
+
+**Trade-off:** [What we gave up, what we gained]
+```
+
+**Example:**
+```markdown
+### Why OpenSearch Serverless?
+
+**Alternative Considered:** Vespa (used in reference implementations)
+
+**Decision:** OpenSearch Serverless
+
+**Rationale:**
+- Fully managed - No cluster operations, auto-scaling
+- AWS-native - Seamless IAM integration, VPC networking
+- Hybrid search - Native BM25 + kNN vector search
+- Cost-effective - Pay per use, no idle cluster costs
+- Familiar - Team has OpenSearch/Elasticsearch experience
+
+**Trade-off:** Vespa has more advanced ranking features, but operational overhead
+outweighs benefits for our Phase 2 scale.
+```
+
+**Why:** Shows thoughtful decision-making, helps future maintainers understand context, demonstrates alternatives were considered
+
+### 5. Concrete Examples Throughout
+
+**Don't just describe - SHOW:**
+
+**Bad:**
+```
+The API accepts a search query and returns results
+```
+
+**Good:**
+```markdown
+**Search Endpoint:**
+```http
+POST /search
+Content-Type: application/json
+Authorization: Bearer <jwt_token>
+
+{
+  "query": "student enrolment process",
+  "kb_id": "deakin",
+  "top_k": 5,
+  "filters": {
+    "audience": ["student", "staff"]
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "request_id": "uuid-here",
+  "documents": [
+    {
+      "doc_id": "sp-doc-123",
+      "title": "Student Enrolment Guide",
+      "content": "...",
+      "score": 0.95
+    }
+  ],
+  "total": 42,
+  "took_ms": 125
+}
+```
+```
+
+**Include examples for:**
+- JSON request/response payloads
+- Code snippets (Python, JavaScript, etc.)
+- Configuration files
+- Database schemas
+- Query DSL (OpenSearch, SQL, etc.)
+- Environment variables
+
+**Why:** Concrete examples are immediately usable by implementers
+
+### 6. Operational Considerations Section
+
+**Every architecture document MUST include:**
+
+```markdown
+## Operational Considerations
+
+### Monitoring & Alerting
+**CloudWatch Dashboards:**
+- API latency (p50, p95, p99)
+- Error rates
+- [Specific metrics for your system]
+
+**Alarms:**
+- ECS task failures → SNS notification
+- High error rate → SNS notification
+
+### Scaling
+**Auto-Scaling:**
+- ECS Fargate API - Target tracking (CPU/memory)
+- Database - [Scaling strategy]
+
+**Capacity Planning:**
+- Current: [Current scale]
+- Phase 2 target: [Target scale]
+- Scaling headroom: [Buffer capacity]
+
+### Disaster Recovery
+**Backup Strategy:**
+- S3 - Versioning enabled
+- Database - Point-in-time recovery
+
+**Recovery Time Objective (RTO):** [Time]
+**Recovery Point Objective (RPO):** [Time]
+
+### Cost Optimization
+**Current Estimated Costs:**
+- Compute: ~$X/month
+- Storage: ~$Y/month
+- Data Transfer: ~$Z/month
+- **Total: ~$T/month**
+
+**Cost Optimization Strategies:**
+- [Specific strategy 1]
+- [Specific strategy 2]
+```
+
+**Why:** Architecture isn't complete without understanding how to operate and maintain it
+
+### 7. Rich Appendices
+
+**Every architecture document should include:**
+
+```markdown
+## Appendices
+
+### Appendix A: Technology Stack
+
+| Layer | Technology | Version | Purpose |
+|-------|-----------|---------|---------|
+| API | FastAPI | 0.115+ | REST API framework |
+| Language | Python | 3.11+ | Application logic |
+| Database | PostgreSQL | 15+ | Primary data store |
+
+### Appendix B: Glossary
+
+| Term | Definition |
+|------|------------|
+| kb_id | Knowledge base identifier - enables multi-tenancy |
+| Hybrid Search | Combination of BM25 (keyword) + kNN (vector) search |
+| RRF | Reciprocal Rank Fusion - score normalization technique |
+
+### Appendix C: Environment Configuration
+
+| Variable | Example | Description |
+|----------|---------|-------------|
+| KB_ID | `deakin` | Knowledge base identifier |
+| ENVIRONMENT | `dev` | Environment name |
+| AWS_REGION | `ap-southeast-2` | AWS region |
+
+### Appendix D: API Contract Reference
+
+[Link to detailed API specifications]
+```
+
+**Why:** Centralized reference for common information, reduces repetition in main document
+
+### 8. Progressive Detail
+
 - Start with high-level overview
 - Drill down into each component
 - Provide implementation-level detail where needed
 - Use layered documentation (overview → details → implementation)
 
-### 6. User-Centric Perspective
+### 9. Decision Rationale & Trade-offs
+
+- For every significant design choice, explain WHY
+- Show alternatives considered and why they were rejected
+- Use comparison tables to evaluate options
+- Make trade-offs explicit
+
+### 10. Cost and Performance Analysis
+
+- Estimate storage and compute costs with breakdown
+- Provide performance targets with rationale
+- Show cost comparisons between approaches
+- Include scaling projections
+
+### 11. User-Centric Perspective
+
 - Show how design decisions benefit users
 - Include "before and after" comparisons
 - Address user experience considerations
 - Explain the problem before jumping to the solution
 
-### 7. Future-Proofing
-- Design for extensibility (use kb_id or similar concepts)
+### 12. Future-Proofing
+
+- Design for extensibility
 - Plan for multiple phases (MVP → full production)
 - Consider reusability across domains
 - Document what's deferred and why
 
-### 8. Operational Excellence
-- Include monitoring and observability from the start
-- Address failure scenarios and error handling
-- Specify logging and metrics requirements
-- Plan for maintainability
+**Gold Standard Reference:** See `/home/piers/GitHub/Deakin/funnelback-search-service/docs/Design/end-to-end-solution-architecture.md` for an exemplary document that follows all these patterns
 
 ## Getting Started
 
@@ -750,7 +1081,7 @@ Your documentation should meet these standards (learned from production projects
 
 **Quick Start Checklist**:
 - [ ] Ask about constraints FIRST
-- [ ] Use AskUserQuestion for key decisions
+- [ ] **REQUIRED**: Use AskUserQuestion UI tool whenever presenting options (NEVER use text for option-based questions)
 - [ ] Research before accepting technology choices
 - [ ] Capture unknowns in "Open Questions"
 - [ ] Create diagrams (even simple ones)
@@ -852,42 +1183,45 @@ or to /project-management for sprint planning?"
 
 ### Starting the Requirements Process
 
-**FIRST: Detect First-Timers**
+**REQUIRED FIRST STEP: Use the AskUserQuestion UI tool**
 
-Before starting the requirements process, ask:
+You MUST begin every requirements session by using the AskUserQuestion tool for initial questions. DO NOT use text-based questions for these initial interactions.
 
+**Example - First Question (Always use UI)**:
 ```
-"Is this your first time running a requirements gathering session?
+AskUserQuestion with questions:
+1. "Is this your first time running a requirements gathering session?"
+   - Options: "Yes - guide me through the process", "No - I'm familiar with requirements gathering"
 
-- Yes → I'll guide you through an interactive walkthrough with your actual project
-- No → Let's dive into constraints and requirements
+2. "Do you have any existing requirements or documentation?"
+   - Options: "Yes - I'll provide the location", "No - starting from scratch", "Not sure - need to check"
 ```
 
-**If user says "Yes" (First-Timer)**:
+**Based on responses:**
+
+**If first-timer**:
 1. Acknowledge: "Great! I'll guide you through the process step-by-step."
 2. Set expectations: "We'll work through: understanding the problem → capturing constraints → researching options → creating documents. I'll explain each step as we go."
 3. Reference the example: "You can also review the [end-to-end example](SKILL.md:512-600) to see what a complete session looks like."
 4. Proceed with the standard process below, but **add more explanations** at each step
 
-**If user says "No" (Experienced)**:
+**If experienced**:
 - Proceed with standard process, less hand-holding
 
 ---
 
-**Then, begin the requirements process by asking:**
+**Continue with AskUserQuestion UI for key decisions:**
 
-1. **What project or feature are we documenting?**
+Use AskUserQuestion for:
+- **Project type**: "What type of project are we documenting?" (New feature, New product, System modernization, Integration project)
+- **Approach selection**: "Which approach fits your situation?" (Customer-First, Technical-First, Parallel)
+- **Technology choices**: "Which platform must we use?" (Azure, AWS, GCP, On-premises, Flexible)
+- **Build vs Buy**: "How should we approach this?" (Build custom, Buy SaaS, Hybrid)
 
-2. **Are there any non-negotiable constraints?** (platforms, architecture principles, compliance, mandates, budget, timeline, etc.)
-   - This is CRITICAL - capture these first
-   - For first-timers: Explain why constraints come first (they guide all other decisions)
-
-3. **Do you have any existing requirements or documentation?**
-   - If yes: Ask for the location/path
-   - If MCP servers available: Use them to query documentation systems
-   - Offer to review existing docs before creating new ones
-
-4. **What phase are you in?** (early concept, ready to implement, etc.)
+**Use text only for open-ended questions:**
+- "What project or feature are we documenting?" (narrative description)
+- "Tell me about the problem you're trying to solve"
+- "Describe your current system and pain points"
 
 5. **Based on their phase, recommend the best approach:**
    - **Early stage/unclear vision**: Customer-First approach
@@ -1008,6 +1342,20 @@ Focus on Basic first, Performance second, Excitement last.
 
 ## Exit Criteria
 
+### Requirements Session Interaction Checklist
+
+**Verify you used the correct interaction pattern throughout the session:**
+
+- [ ] Used AskUserQuestion UI for initial questions (first-timer, existing docs, project phase)
+- [ ] Used AskUserQuestion UI for all technology/platform choices
+- [ ] Used AskUserQuestion UI for all approach decisions (Customer-First vs Technical-First, etc.)
+- [ ] Used AskUserQuestion UI for all prioritization decisions (MoSCoW, feature ranking)
+- [ ] Used AskUserQuestion UI for all build vs buy decisions
+- [ ] Used AskUserQuestion UI for all trade-off decisions (cost vs timeline, etc.)
+- [ ] Only used text questions for open-ended narrative responses ("tell me about...", "describe...")
+
+**If you used text-based questions for option selection, you did it wrong.** Review the "CRITICAL INTERACTION RULE" in Key Principles.
+
 ### Requirements Gathering Complete When:
 - [ ] All core questions answered (users, scale, constraints, success metrics)
 - [ ] All user personas identified with needs defined
@@ -1092,7 +1440,30 @@ Focus on Basic first, Performance second, Excitement last.
 
 ## Anti-Patterns to Avoid
 
-### ❌ Anti-Pattern 1: Passive Documentation
+### ❌ Anti-Pattern 1: Text Questions for Option Selection
+
+**Wrong**:
+```
+You: "Is this your first time running a requirements session? (yes/no)"
+You: "Which approach do you prefer: Customer-First, Technical-First, or Parallel?"
+You: "Do you want to use AWS or Azure?"
+```
+
+**Right**:
+```
+You: [Uses AskUserQuestion tool with discrete options]
+
+AskUserQuestion with questions:
+- "Is this your first time running a requirements gathering session?"
+  Options: "Yes - guide me through", "No - I'm experienced"
+
+- "Which cloud platform must we use?"
+  Options: "AWS", "Azure", "GCP", "On-premises", "Flexible - recommend best option"
+```
+
+**Why**: The UI tool provides better UX, makes options clearer, and allows users to easily see and compare choices. Text-based option questions are harder to read and easier to misinterpret.
+
+### ❌ Anti-Pattern 2: Passive Documentation
 
 **Wrong**:
 ```
@@ -1112,7 +1483,7 @@ You: "Let me understand the caching requirements first:
 
 **Why**: Passive documentation just transcribes what users say without adding value. Your role is to challenge, research, and suggest better approaches.
 
-### ❌ Anti-Pattern 2: Solution-First Thinking
+### ❌ Anti-Pattern 3: Solution-First Thinking
 
 **Wrong**:
 ```
@@ -1133,7 +1504,7 @@ You: "What problem are we solving?
 
 **Why**: Starting with solutions skips understanding the real problem. Often there's a simpler fix.
 
-### ❌ Anti-Pattern 3: Over-Engineering
+### ❌ Anti-Pattern 4: Over-Engineering
 
 **Wrong**:
 ```
@@ -1154,7 +1525,7 @@ You: "That scale doesn't need Kubernetes complexity. Here are simpler options:
 
 **Why**: Complex architectures have high operational overhead. Start simple, scale when needed.
 
-### ❌ Anti-Pattern 4: Ignoring Constraints
+### ❌ Anti-Pattern 5: Ignoring Constraints
 
 **Wrong**:
 ```
@@ -1171,7 +1542,7 @@ You: "Since Azure is required, let's use Azure Container Apps
 
 **Why**: Constraints are non-negotiable. Work creatively within them, don't ignore them.
 
-### ❌ Anti-Pattern 5: Blocking on Unknowns
+### ❌ Anti-Pattern 6: Blocking on Unknowns
 
 **Wrong**:
 ```
@@ -1192,7 +1563,7 @@ You: "I'll capture this in Open Questions and continue with other sections.
 
 **Why**: Don't wait for all answers. Capture questions and continue making progress.
 
-### ❌ Anti-Pattern 6: Vendor Lock-In by Default
+### ❌ Anti-Pattern 7: Vendor Lock-In by Default
 
 **Wrong**:
 ```python
@@ -1313,3 +1684,9 @@ Throughout this process, reference:
 8. **Clear**: Use simple language, concrete examples, visual aids
 9. **Actionable**: Requirements should be clear enough to estimate and implement
 10. **Reusable**: Design for abstraction and portability
+
+**CRITICAL INTERACTION RULE:**
+- ✅ **DO** use AskUserQuestion UI tool when presenting discrete options for user to choose (single or multi-select)
+- ❌ **DO NOT** use text-based questions like "Which approach do you prefer: A, B, or C?"
+- ❌ **DO NOT** ask yes/no questions in text - use the UI tool with options
+- ✅ **DO** use text only for open-ended questions requiring narrative responses ("tell me about...", "describe...")
