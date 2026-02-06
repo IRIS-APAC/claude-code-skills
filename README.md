@@ -31,10 +31,17 @@ cd claude-code-skills
 
 The install script creates symlinks from `~/.claude/skills/` and `~/.claude/commands/` to the directories/files in this repository.
 
-**Linux/Mac:**
+**Claude Code (Linux/Mac/WSL):**
 ```bash
 ./install.sh
 ```
+
+**Codex (WSL/Linux):**
+```bash
+./install_codex.sh
+```
+
+This installs skills into `$CODEX_HOME/skills` (defaults to `~/.codex/skills`). Restart Codex to pick up new skills.
 
 **Windows (PowerShell):**
 
@@ -71,6 +78,8 @@ git pull
 
 The symlinks ensure Claude Code immediately uses the updated skills and commands.
 
+For Codex, re-run `./install_codex.sh` after pulling to refresh the generated Codex-compatible `SKILL.md` files.
+
 ## What Gets Installed
 
 The install script:
@@ -79,6 +88,12 @@ The install script:
 3. Symlinks each command file from `commands/` into `~/.claude/commands/`
 4. Makes skills and commands available globally for all your projects
 5. Skills auto-load when relevant, commands are invoked with slash syntax (e.g., `/commit`)
+
+The Codex install script (`install_codex.sh`):
+1. Creates `$CODEX_HOME/skills/` (defaults to `~/.codex/skills/`) if it doesn't exist
+2. Creates a folder per skill in `$CODEX_HOME/skills/` and symlinks the skill resources from this repo
+3. Writes a Codex-compatible `SKILL.md` (frontmatter is only `name` and `description`)
+4. Does not install `commands/` (Codex uses skills, not Claude Code slash-commands)
 
 ## Per-Project Setup
 
@@ -430,7 +445,7 @@ Use conventional commits:
 feat(skill-name): add new feature
 fix(skill-name): correct issue with...
 docs(skill-name): update documentation for...
-refactor(skill-name): reorganize without changing behavior
+refactor(skill-name): reorganise without changing behaviour
 chore: update dependencies, tooling, etc.
 ```
 

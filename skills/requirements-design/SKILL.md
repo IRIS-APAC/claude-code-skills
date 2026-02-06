@@ -1,3 +1,9 @@
+---
+name: requirements-design
+description: "Gather requirements and produce five core design documents: constraints, customer value, solution design, requirements, and architecture."
+model: sonnet
+---
+
 # Requirements & Design Skill
 
 You are a world-class product and solution architect helping to gather requirements and create comprehensive design documentation. Your goal is to transform initial requirements into five interconnected documents that enable effective planning, estimation, and implementation.
@@ -59,10 +65,10 @@ You should actively use tools to research:
    - Service boundaries, module structure, class diagrams, deployment strategy
    - API contracts with full request/response schemas
    - Database schemas, data models, migration strategies
-   - Security implementation details (authentication, authorization, encryption)
+   - Security implementation details (authentication, authorisation, encryption)
    - Monitoring, logging, alerting implementation
    - Technology choices with rationale (alternatives, trade-offs)
-   - Operational considerations (scaling, DR, cost optimization)
+   - Operational considerations (scaling, DR, cost optimisation)
    - Implementation-ready technical design with code examples
    - More detailed than Solution Design - includes implementation-level specifications
    - File: `architecture-{project-name}.md`
@@ -170,13 +176,13 @@ You must **challenge, research, and suggest** throughout the requirements proces
 1. **🚩 Build vs Buy Not Explored**
    - User proposes custom solution without mentioning existing products
    - **Action**: `WebSearch: "[industry] [use case] software solutions 2026"`
-   - **Example**: "livestock allocation optimization software 2026"
+   - **Example**: "livestock allocation optimisation software 2026"
    - Present top 3 SaaS/platforms with pricing vs build estimate
 
 2. **🚩 Technology Choice Without Rationale**
    - User specifies technology ("use Python") without explaining why
    - **Action**: `WebSearch: "[technology] vs alternatives for [use case] 2026"`
-   - **Example**: "Python vs Julia for optimization workloads 2026"
+   - **Example**: "Python vs Julia for optimisation workloads 2026"
    - Present performance benchmarks, pros/cons
 
 3. **🚩 Vague Timeline/Budget**
@@ -447,7 +453,7 @@ Create `docs/Design/constraints-{project-name}.md` using [project-constraints-te
 **Constraint**: Budget cap at $100K
 - **Type**: Budget Constraint
 - **Rationale**: Approved budget allocation
-- **Impact**: Must optimize for cost
+- **Impact**: Must optimise for cost
 - **Flexibility**: Can request +$25K with business case (1-month approval)
 
 ## Flexible Preferences (Not Constraints)
@@ -607,7 +613,7 @@ A document is NOT complete until:
 - Disaster recovery strategy
 
 **Security & Compliance**:
-- Authentication & authorization requirements
+- Authentication & authorisation requirements
 - Data encryption (at rest, in transit)
 - Audit logging requirements
 - Compliance standards (GDPR, HIPAA, SOC 2, PCI-DSS)
@@ -786,7 +792,7 @@ graph TB
     ECS --> RDS
 ```
 
-**Color-Coding Convention (High Contrast):**
+**Colour-Coding Convention (High Contrast):**
 - Consumer/User Layer: Blue (#5dade2 fill, #1f618d stroke) - Clear contrast for user-facing components
 - Integration Layer: Orange (#f39c12 fill, #d68910 stroke) - Stands out as the connection layer
 - Service Layer: Green (#58d68d fill, #27ae60 stroke) - Distinct from infrastructure
@@ -794,7 +800,7 @@ graph TB
 - Data Sources: Coral (#ec7063 fill, #c0392b stroke) - High visibility for external systems
 
 **Use format:** `style NodeName fill:#58d68d,stroke:#27ae60,stroke-width:2px,color:#000`
-**Text color:** Always use `color:#000` (black) for readability on all backgrounds
+**Text colour:** Always use `color:#000` (black) for readability on all backgrounds
 
 **Why:** Different diagrams serve different purposes - components show structure, sequences show flows, deployment shows infrastructure
 
@@ -818,7 +824,7 @@ For every major user flow, include a sequence diagram with:
 1. User asks question in AI platform
 2. Platform calls Search API with query + context
 3. JWT validation - extract user identity + groups
-4. Query normalization
+4. Query normalisation
 5. Hybrid search (BM25 + vector) with ACL filtering
 6. Content retrieval
 7. Results returned (permission-filtered)
@@ -997,7 +1003,7 @@ Authorization: Bearer <jwt_token>
 |------|------------|
 | kb_id | Knowledge base identifier - enables multi-tenancy |
 | Hybrid Search | Combination of BM25 (keyword) + kNN (vector) search |
-| RRF | Reciprocal Rank Fusion - score normalization technique |
+| RRF | Reciprocal Rank Fusion - score normalisation technique |
 
 ### Appendix C: Environment Configuration
 
