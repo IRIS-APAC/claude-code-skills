@@ -15,6 +15,9 @@ Reusable Claude Code skills and commands for agile project management and develo
 - **project-management** - Story templates, estimation, sprint planning, epic planning
 - **developer-analysis** - Engineering analysis before implementation
 - **testing** - Testing strategy, coverage analysis, and quality assurance
+- **brainstorming** - Interactive brainstorming sessions with creative techniques and anti-bias protocols
+- **party-mode** - Multi-agent discussions with diverse expert personas
+- **advanced-elicitation** - Guided requirement elicitation using structured analytical methods
 
 ## Installation
 
@@ -124,6 +127,9 @@ Commands are lightweight slash commands for common development tasks:
 - **story** - Create user stories
 - **story-start** - Start work on a story
 - **comment** - Add comment to current story ticket
+- **brainstorming** - Facilitate interactive brainstorming sessions
+- **party-mode-discussion** - Multi-agent collaborative discussions
+- **advanced-elicitation** - Apply elicitation methods to enhance content
 
 ## Skills Overview
 
@@ -220,6 +226,45 @@ Comprehensive requirements gathering and design documentation creation.
 - Creates NFRs → handoff to `/testing` for test strategy
 - Creates API contracts → handoff to `/developer-analysis` for POCs and mocks
 
+### brainstorming
+
+Interactive brainstorming facilitation with structured creative techniques.
+
+**Automatically triggers when:** Generating ideas for a project or feature, exploring solutions to a problem, creative ideation sessions
+
+**Key features:**
+- Diverse creative techniques from a curated methods library
+- Anti-bias protocols to push past obvious ideas into novel territory
+- Quantity-first approach (100+ ideas before organising)
+- Session documentation and synthesis reports
+- Integration with advanced-elicitation for deeper exploration
+
+### party-mode
+
+Multi-agent discussions between diverse expert personas.
+
+**Automatically triggers when:** Wanting diverse expert perspectives, collaborative brainstorming with different viewpoints, cross-functional discussions
+
+**Key features:**
+- Agent manifest loading with rich personality data
+- Natural multi-agent conversation orchestration (2-3 agents per round)
+- Character-consistent role-playing with unique communication styles
+- Agent-to-agent cross-talk and building on previous points
+- Topic-aware agent selection for balanced perspectives
+
+### advanced-elicitation
+
+Guided requirement elicitation using diverse analytical methods.
+
+**Automatically triggers when:** Enhancing document sections with deeper analysis, applying structured techniques to requirements, exploring requirements from multiple angles
+
+**Key features:**
+- Method registry with categorised elicitation techniques
+- Context-aware smart method selection (5 best-fit methods presented)
+- Iterative application with user approval at each step
+- Integration with brainstorming and party-mode for multi-persona elicitation
+- Reshuffle, list all, or proceed workflow for flexible exploration
+
 ## How Skills Work Together
 
 **Example:** "Create a story for implementing dark mode"
@@ -261,14 +306,20 @@ claude-code-skills/
 │   ├── format.md
 │   ├── story.md
 │   ├── story-start.md
-│   └── comment.md
+│   ├── comment.md
+│   ├── brainstorming.md
+│   ├── party-mode-discussion.md
+│   └── advanced-elicitation.md
 ├── skills/               # Skills (methodology/workflows)
 │   ├── requirements-design/
 │   ├── git-workflow/
 │   ├── agile-board/
 │   ├── project-management/
 │   ├── developer-analysis/
-│   └── testing/
+│   ├── testing/
+│   ├── brainstorming/
+│   ├── party-mode/
+│   └── advanced-elicitation/
 ├── install.sh
 ├── install.ps1
 └── README.md
@@ -320,6 +371,24 @@ claude-code-skills/
   - Coverage analysis
   - Quality verification
   - Mock creation patterns
+
+- **brainstorming** = "IDEATION"
+  - Creative technique facilitation
+  - Anti-bias divergent thinking
+  - Quantity-first idea generation
+  - Session synthesis and reporting
+
+- **party-mode** = "PERSPECTIVES"
+  - Multi-agent persona orchestration
+  - Cross-functional expert discussions
+  - Natural conversation flow management
+  - Diverse viewpoint exploration
+
+- **advanced-elicitation** = "DEPTH"
+  - Structured analytical methods
+  - Iterative content enhancement
+  - Context-aware method selection
+  - Multi-persona elicitation support
 
 ### Progressive Disclosure
 
