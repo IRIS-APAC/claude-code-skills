@@ -318,6 +318,8 @@ See `references/story-templates.md` for language-specific examples.
 
 **Break down L/XL stories** into smaller M or S stories when possible.
 
+> **Note**: The "Time (with AI)" column above is for story complexity and estimation decisions only. For effort model billing and planning, the **upper bound** of each range is used as a conservative estimate. See the Story Points to Days Conversion table in the Effort Model Generation section.
+
 See `references/estimation-guide.md` for full complexity factors and checklist.
 
 ### Complexity Factors
@@ -368,6 +370,8 @@ See `references/epic-planning.md` for comprehensive guide on:
 
 - Breaking epics into stories
 - Managing story dependencies (blockers)
+- **Setting epic start/end dates and milestones**
+- **Generating effort models with cost/fee calculations**
 - Release planning across multiple epics
 - Cross-project coordination
 - Epic velocity and burndown tracking
@@ -438,6 +442,176 @@ Track completed story points per sprint:
 - **Average velocity**: 21 points/sprint
 
 Use average velocity to plan sprint capacity.
+
+## Effort Model Generation
+
+**CRITICAL**: Always generate an effort model after epic planning is complete.
+
+### When to Generate
+
+Generate effort model when:
+- [ ] All stories are estimated with story points
+- [ ] Sprint duration is defined
+- [ ] Team composition is known
+- [ ] Rate card is available
+- [ ] Sprint start date is defined
+
+### Effort Model Components
+
+**Required columns**:
+- Sprint number (sequential)
+- Start Date (sprint/story start)
+- End Date (sprint/story end)
+- Epic (parent epic)
+- Story ID
+- Story Title
+- Story Points (T-shirt sizing: XS=1, S=3, M=5, L=8, XL=13)
+- Effort (Days) - Converted from story points using conversion table
+- Velocity Adjuster (%) - Optional adjustment to effort; if blank, Final Effort (Days) = Effort (Days)
+- Final Effort (Days) - Effort (Days) adjusted by Velocity Adjuster; used for all cost/fee calculations
+- Skill/Role (assigned based on story content)
+- Assignee (team member name)
+- Cost (currency) - Daily rate × Final Effort (Days)
+- Original Fee (currency) - Client rate × Final Effort (Days)
+- % Discount - Optional per-row discount applied to Original Fee
+- Final Discounted Fee (currency) - Original Fee × (1 − % Discount)
+- Dependencies (story IDs this story depends on)
+- Notes (context, risks, assumptions)
+
+### Story Points to Days Conversion
+
+Use **upper bound** conversion (conservative estimates):
+
+| Story Points | Effort (Days) |
+|--------------|---------------|
+| XS (1)       | 0.25          |
+| S (3)        | 0.75          |
+| M (5)        | 2.0           |
+| L (8)        | 4.0           |
+| XL (13)      | 8.0           |
+
+### Skill Assignment Rules
+
+Auto-assign skills based on story content:
+- **Lead Tech** - Kickoffs, planning, PM work, training, handover, DevOps (if senior)
+- **Backend Dev** - APIs, pipelines, transformations, business logic, data processing
+- **Frontend Dev** - UI components, client-side logic
+- **Full Stack Dev** - Features spanning frontend + backend
+- **DevOps** - Infrastructure, deployments, CI/CD, networking, VPN, SFTP
+- **DBA** - Database schema, RBAC, performance tuning, index optimization
+- **QA Engineer** - Testing, validation, test automation
+- **Engagement Lead** - Overall project coordination (if dedicated engagement lead role exists)
+
+### Rate Card Structure
+
+Maintain rate card in `docs/Rate_table.csv`:
+```csv
+Role,Cost Daily Rate,Fee Daily Rate
+Lead Tech,1100,2500
+Backend Dev,550,1900
+DevOps Engineer,550,1900
+DBA,550,1900
+QA Engineer,550,1900
+Engagement Lead,1100,2750
+
+```
+
+### Effort Model Format
+
+**Output format**: Formula-based Excel (.xlsx) with:
+- **Formulas for calculations** (not hardcoded values)
+- **Velocity Adjuster column (I)**: % input; left blank if no adjustment needed
+- **Final Effort (Days) column (J)**: `=IF(I{r}="", H{r}, H{r}*(1-I{r}))`
+- **Cost column (M)**: `=IFERROR(VLOOKUP(K{r}, RateCard, 2, FALSE) * J{r}, "Check skill")`
+- **Original Fee column (N)**: `=IFERROR(VLOOKUP(K{r}, RateCard, 3, FALSE) * J{r}, "Check skill")`
+- **% Discount column (O)**: % input; left blank if no discount applies
+- **Final Discounted Fee column (P)**: `=IFERROR(N{r}*(1-O{r}), N{r})`
+- **Sprint total rows**: must use SUMIF on col A (sprint number) — **never range-based SUM** — summing: Points (G), Effort Days (H), Final Effort Days (J), Cost (M), Original Fee (N), Final Discounted Fee (P)
+- **Grand total**: `=SUM(col4:coln)` across all data rows for the same columns
+- **Conditional formatting**: Highlight overloaded sprints (>100% capacity)
+
+> ⚠️ **CRITICAL — always use SUMIF for sprint totals, never range-based SUM:**
+> Overhead rows (e.g. PM, DevOps) are typically appended to the end of the STORIES list grouped by type, not interleaved within each sprint's block. This means a sprint's rows are **non-contiguous** in the sheet. A range-based `=SUM(G17:G27)` will miss any overhead rows for that sprint that sit outside the range, and will incorrectly include rows from other sprints if the range overlaps. `SUMIF` on column A (the sprint number column) is the correct pattern — it aggregates all rows matching the sprint number regardless of their physical position in the sheet.
+
+### Sprint Allocation
+
+When allocating stories to sprints:
+1. **Calculate sprint capacity**: Team size × sprint days × 0.8 (buffer)
+2. **Respect dependencies**: Dependent stories in later sprints
+3. **Balance load**: Aim for 80% capacity per sprint (20% buffer)
+4. **Sequential assignment**: Fill Sprint 1, then 2, then 3...
+5. **Consider skills**: Don't overload single skill in one sprint
+
+### Team Size Guidance
+
+**For small teams (1-3 people)**:
+- Accept that some sprints will have single skill doing multiple roles
+- Flag in Notes column when person wears multiple hats
+- Consider suggesting additional resources if critical path affected
+
+**Example note**: "Lead Tech also doing DevOps work - risk if overloaded"
+
+### Location-Based Considerations
+
+Factor in location for:
+- **Public holidays** - Adjust sprint capacity for holiday weeks
+- **Currency** - Use appropriate currency for cost/fee
+- **Rate variations** - Different locations have different rate cards
+
+### Effort Model Example Structure
+
+```
+[Rate Card Tab]
+Role | Cost Daily Rate | Fee Daily Rate
+(Rows start at row 3 — referenced as $A$3:$C$[n] in VLOOKUP)
+
+[Effort Model Tab]
+Row 1: Title
+Row 2: Note / warning
+Row 3: Column headers
+Row 4+: Data rows (stories + overhead rows e.g. Engagement Lead)
+
+Columns: Sprint | Start Date | End Date | Epic | Story ID | Story Title |
+         Story Points | Effort (Days) | Velocity Adjuster | Final Effort (Days) | Skill | Assignee |
+         Cost | Original Fee | % Discount | Final Discounted Fee | Dependencies | Notes
+         (A)      (B)            (C)        (D)    (E)        (F)
+         (G)          (H)              (I)                  (J)               (K)      (L)
+         (M)      (N)            (O)           (P)                    (Q)            (R)
+
+[Formula in Final Effort (Days) cell (col J, row r): =IF(I{r}="", H{r}, H{r}*(1-I{r}))]
+[Formula in Cost cell (col M, row r):               =IFERROR(VLOOKUP(K{r},'Rate Card'!$A$3:$C$10,2,0)*J{r},"Check skill")]
+[Formula in Original Fee cell (col N, row r):       =IFERROR(VLOOKUP(K{r},'Rate Card'!$A$3:$C$10,3,0)*J{r},"Check skill")]
+[Formula in Final Discounted Fee cell (col P, row r): =IFERROR(N{r}*(1-O{r}),N{r})]
+
+[Sprint Total rows — SUMIF on sprint number in column A]
+[last_data_row = 3 + len(STORIES)]
+Points:               =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $G$4:$G${last_data_row})
+Days:                 =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $H$4:$H${last_data_row})
+Final Effort (Days):  =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $J$4:$J${last_data_row})
+Cost:                 =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $M$4:$M${last_data_row})
+Original Fee:         =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $N$4:$N${last_data_row})
+Final Discounted Fee: =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $P$4:$P${last_data_row})
+
+[Grand Total row]
+Points:               =SUM(G4:G{last_data_row})
+Days:                 =SUM(H4:H{last_data_row})
+Final Effort (Days):  =SUM(J4:J{last_data_row})
+Cost:                 =SUM(M4:M{last_data_row})
+Original Fee:         =SUM(N4:N{last_data_row})
+Final Discounted Fee: =SUM(P4:P{last_data_row})
+```
+
+### Validation Checks
+
+Before finalizing effort model:
+- [ ] All stories have effort estimates
+- [ ] All stories have skill assignments
+- [ ] Dependencies are captured
+- [ ] Sprint dates are continuous (no gaps)
+- [ ] Total effort matches story points conversion
+- [ ] Rate card covers all assigned skills
+- [ ] Formulas calculate correctly
+- [ ] No sprint exceeds 120% capacity
 
 ## Story Hierarchy
 
