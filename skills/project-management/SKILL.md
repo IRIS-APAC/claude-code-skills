@@ -318,7 +318,7 @@ See `references/story-templates.md` for language-specific examples.
 
 **Break down L/XL stories** into smaller M or S stories when possible.
 
-> **Note**: The "Time (with AI)" column above is for story complexity and estimation decisions only. For effort model billing and planning, the **upper bound** of each range is used as a conservative estimate. See the Story Points to Days Conversion table in the Effort Model Generation section.
+> **Note**: The "Time (with AI)" column above is for story complexity and estimation decisions only. For effort model billing and planning, a separate conversion table is used (XS=0.5d, S=1.0d, M=3.0d, L=6.0d, XL=12.0d). See the Story Points to Days Conversion table in the Effort Model Generation section.
 
 See `references/estimation-guide.md` for full complexity factors and checklist.
 
@@ -463,16 +463,16 @@ Generate effort model when:
 - Start Date (sprint/story start)
 - End Date (sprint/story end)
 - Epic (parent epic)
-- Story ID
+- Story ID — use `EXPENSE` for non-labour rows, `OVERHEAD` for overhead roles
 - Story Title
-- Story Points (T-shirt sizing: XS=1, S=3, M=5, L=8, XL=13)
-- Effort (Days) - Converted from story points using conversion table
-- Velocity Adjuster (%) - Optional adjustment to effort; if blank, Final Effort (Days) = Effort (Days)
-- Final Effort (Days) - Effort (Days) adjusted by Velocity Adjuster; used for all cost/fee calculations
-- Skill/Role (assigned based on story content)
-- Assignee (team member name)
-- Cost (currency) - Daily rate × Final Effort (Days)
-- Original Fee (currency) - Client rate × Final Effort (Days)
+- Story Points (T-shirt sizing: XS=1, S=3, M=5, L=8, XL=13) — blank for expense/overhead rows
+- Effort (Days) - Converted from story points; blank for expense rows
+- Velocity Adjuster (reduce days by xx%) - Optional % reduction to effort; blank for expense rows
+- Final Effort (Days) - Effort reduced by Velocity Adjuster; blank for expense rows
+- Skill/Role (assigned based on story content; use expense category for expense rows e.g. `Infrastructure`, `LLM Consumption`, `Hardware`)
+- Cost (currency) - Labour: Daily rate × Final Effort (Days) via formula; Expense: direct entry
+- Markup % - Expense rows only: markup applied to cost to derive Original Fee; blank for labour rows
+- Original Fee (currency) - Labour: Client rate × Final Effort (Days); Expense: Cost × (1 + Markup %)
 - % Discount - Optional per-row discount applied to Original Fee
 - Final Discounted Fee (currency) - Original Fee × (1 − % Discount)
 - Dependencies (story IDs this story depends on)
@@ -484,11 +484,11 @@ Use **upper bound** conversion (conservative estimates):
 
 | Story Points | Effort (Days) |
 |--------------|---------------|
-| XS (1)       | 0.25          |
-| S (3)        | 0.75          |
-| M (5)        | 2.0           |
-| L (8)        | 4.0           |
-| XL (13)      | 8.0           |
+| XS (1)       | 0.5           |
+| S (3)        | 1.0           |
+| M (5)        | 3.0           |
+| L (8)        | 6.0           |
+| XL (13)      | 12.0          |
 
 ### Skill Assignment Rules
 
@@ -500,7 +500,8 @@ Auto-assign skills based on story content:
 - **DevOps** - Infrastructure, deployments, CI/CD, networking, VPN, SFTP
 - **DBA** - Database schema, RBAC, performance tuning, index optimization
 - **QA Engineer** - Testing, validation, test automation
-- **Engagement Lead** - Overall project coordination (if dedicated engagement lead role exists)
+- **Functional Lead** - Requirements gathering, business logic analysis, framing requirements, driving business engagement and UAT sessions
+- **Engagement Lead** - Always included as a standard overhead row (1 day per week per sprint); append one row per sprint regardless of named assignee
 
 ### Rate Card Structure
 
@@ -512,6 +513,7 @@ Backend Dev,550,1900
 DevOps Engineer,550,1900
 DBA,550,1900
 QA Engineer,550,1900
+Functional Lead,550,1900
 Engagement Lead,1100,2750
 
 ```
@@ -520,18 +522,75 @@ Engagement Lead,1100,2750
 
 **Output format**: Formula-based Excel (.xlsx) with:
 - **Formulas for calculations** (not hardcoded values)
-- **Velocity Adjuster column (I)**: % input; left blank if no adjustment needed
+- **Velocity Adjuster (reduce days by xx%) column (I)**: % input; left blank if no adjustment needed
 - **Final Effort (Days) column (J)**: `=IF(I{r}="", H{r}, H{r}*(1-I{r}))`
-- **Cost column (M)**: `=IFERROR(VLOOKUP(K{r}, RateCard, 2, FALSE) * J{r}, "Check skill")`
-- **Original Fee column (N)**: `=IFERROR(VLOOKUP(K{r}, RateCard, 3, FALSE) * J{r}, "Check skill")`
+- **Cost column (L)**: Labour rows: `=IFERROR(VLOOKUP(K{r}, RateCard, 2, FALSE) * J{r}, "Check skill")`; Expense rows: direct entry
+- **Markup % column (M)**: Expense rows only — % markup on cost; blank for labour rows
+- **Original Fee column (N)**: `=IF(E{r}="EXPENSE", L{r}*(1+M{r}), IFERROR(VLOOKUP(K{r}, RateCard, 3, FALSE) * J{r}, "Check skill"))`
 - **% Discount column (O)**: % input; left blank if no discount applies
 - **Final Discounted Fee column (P)**: `=IFERROR(N{r}*(1-O{r}), N{r})`
-- **Sprint total rows**: must use SUMIF on col A (sprint number) — **never range-based SUM** — summing: Points (G), Effort Days (H), Final Effort Days (J), Cost (M), Original Fee (N), Final Discounted Fee (P)
+- **Sprint total rows**: must use SUMIF on col A (sprint number) — **never range-based SUM** — summing: Points (G), Effort Days (H), Final Effort Days (J), Cost (L), Original Fee (N), Final Discounted Fee (P)
 - **Grand total**: `=SUM(col4:coln)` across all data rows for the same columns
 - **Conditional formatting**: Highlight overloaded sprints (>100% capacity)
 
 > ⚠️ **CRITICAL — always use SUMIF for sprint totals, never range-based SUM:**
 > Overhead rows (e.g. PM, DevOps) are typically appended to the end of the STORIES list grouped by type, not interleaved within each sprint's block. This means a sprint's rows are **non-contiguous** in the sheet. A range-based `=SUM(G17:G27)` will miss any overhead rows for that sprint that sit outside the range, and will incorrectly include rows from other sprints if the range overlaps. `SUMIF` on column A (the sprint number column) is the correct pattern — it aggregates all rows matching the sprint number regardless of their physical position in the sheet.
+
+### Overhead Rows
+
+**CRITICAL**: Always append overhead rows to the effort model — one per sprint for each overhead role.
+
+#### Engagement Lead (mandatory)
+- **Always include** — do not skip even if no named person is assigned
+- One row per sprint
+- **Effort (Days)** = 1 day × number of weeks in the sprint (e.g. 2-week sprint = 2 days, 3-week sprint = 3 days)
+- Story Points: leave blank
+- Story ID: `OVERHEAD`
+- Epic: `Project Management`
+- Story Title: `Engagement Lead oversight - Sprint {N}`
+- Skill: `Engagement Lead`
+- Velocity Adjuster: leave blank
+- Dependencies: leave blank
+
+#### Functional Lead (include when requirements/UAT work is present)
+- Add rows for requirements workshops, UAT planning, and business engagement sessions
+- Estimate effort based on known sessions or default to 0.5 days per sprint if unspecified
+- Story ID: `OVERHEAD` or linked story ID if directly tied to a story
+- Skill: `Functional Lead`
+
+> ⚠️ Overhead rows must carry a sprint number in column A so SUMIF picks them up correctly in sprint totals.
+
+### Expense Rows
+
+Use expense rows for non-labour costs: infrastructure, LLM consumption, hardware, devices, licences, etc.
+
+#### Row format
+- **Story ID**: `EXPENSE`
+- **Story Points, Effort (Days), Velocity Adjuster, Final Effort (Days)**: leave blank
+- **Skill**: expense category — `Infrastructure`, `LLM Consumption`, `Hardware`, `Licences` etc.
+- **Cost**: direct entry (actual or estimated cost)
+- **Markup %**: direct entry — controls the proposed client fee:
+  - Standard markup: enter e.g. `25%` → Original Fee = Cost × 1.25
+  - Pass-through (reimbursable): enter `0%` → Original Fee = Cost
+- **Original Fee**: formula `=L{r}*(1+M{r})` — auto-calculated from Cost and Markup %
+- **% Discount** and **Final Discounted Fee**: work the same as labour rows
+- **Sprint**: tie to the sprint the expense is incurred in; use `0` for project-level expenses with no specific sprint
+
+#### Reimbursement clause (≤15% of project cost)
+
+Add a summary block below the Grand Total row:
+
+| Label | Formula |
+|-------|---------|
+| Total Labour Cost | `=SUMIF(E4:En, "<>EXPENSE", L4:Ln)` |
+| Total Expenses Cost | `=SUMIF(E4:En, "EXPENSE", L4:Ln)` |
+| Expenses as % of Labour | `=Total Expenses Cost / Total Labour Cost` |
+| Reimbursement Cap (15%) | `=Total Labour Cost * 0.15` |
+| Status | `=IF(Total Expenses Cost > Cap, "⚠ EXCEEDS 15% CAP", "Within limit")` |
+
+Apply **red conditional formatting** to the Status cell when expenses exceed the cap.
+
+> ⚠️ The reimbursement summary uses Labour Cost (not total project cost) as the base, since expenses are excluded from labour. Adjust the cap % if the contract references total project cost instead.
 
 ### Sprint Allocation
 
@@ -572,23 +631,24 @@ Row 3: Column headers
 Row 4+: Data rows (stories + overhead rows e.g. Engagement Lead)
 
 Columns: Sprint | Start Date | End Date | Epic | Story ID | Story Title |
-         Story Points | Effort (Days) | Velocity Adjuster | Final Effort (Days) | Skill | Assignee |
-         Cost | Original Fee | % Discount | Final Discounted Fee | Dependencies | Notes
+         Story Points | Effort (Days) | Velocity Adjuster (reduce days by xx%) | Final Effort (Days) | Skill |
+         Cost | Markup % | Original Fee | % Discount | Final Discounted Fee | Dependencies | Notes
          (A)      (B)            (C)        (D)    (E)        (F)
-         (G)          (H)              (I)                  (J)               (K)      (L)
-         (M)      (N)            (O)           (P)                    (Q)            (R)
+         (G)          (H)                       (I)                             (J)          (K)
+         (L)     (M)        (N)            (O)           (P)                    (Q)            (R)
 
-[Formula in Final Effort (Days) cell (col J, row r): =IF(I{r}="", H{r}, H{r}*(1-I{r}))]
-[Formula in Cost cell (col M, row r):               =IFERROR(VLOOKUP(K{r},'Rate Card'!$A$3:$C$10,2,0)*J{r},"Check skill")]
-[Formula in Original Fee cell (col N, row r):       =IFERROR(VLOOKUP(K{r},'Rate Card'!$A$3:$C$10,3,0)*J{r},"Check skill")]
-[Formula in Final Discounted Fee cell (col P, row r): =IFERROR(N{r}*(1-O{r}),N{r})]
+[Formula in Final Effort (Days) cell (col J, row r):    =IF(I{r}="", H{r}, H{r}*(1-I{r}))]
+[Formula in Cost cell (col L, row r) — labour only:     =IFERROR(VLOOKUP(K{r},'Rate Card'!$A$3:$C$10,2,0)*J{r},"Check skill")]
+[Cost cell — expense rows:                              direct entry]
+[Formula in Original Fee cell (col N, row r):           =IF(E{r}="EXPENSE",L{r}*(1+M{r}),IFERROR(VLOOKUP(K{r},'Rate Card'!$A$3:$C$10,3,0)*J{r},"Check skill"))]
+[Formula in Final Discounted Fee cell (col P, row r):   =IFERROR(N{r}*(1-O{r}),N{r})]
 
 [Sprint Total rows — SUMIF on sprint number in column A]
-[last_data_row = 3 + len(STORIES)]
+[last_data_row = 3 + len(STORIES) + num_sprints + num_expense_rows]
 Points:               =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $G$4:$G${last_data_row})
 Days:                 =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $H$4:$H${last_data_row})
 Final Effort (Days):  =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $J$4:$J${last_data_row})
-Cost:                 =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $M$4:$M${last_data_row})
+Cost:                 =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $L$4:$L${last_data_row})
 Original Fee:         =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $N$4:$N${last_data_row})
 Final Discounted Fee: =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $P$4:$P${last_data_row})
 
@@ -596,9 +656,17 @@ Final Discounted Fee: =SUMIF($A$4:$A${last_data_row}, {sprint_num}, $P$4:$P${las
 Points:               =SUM(G4:G{last_data_row})
 Days:                 =SUM(H4:H{last_data_row})
 Final Effort (Days):  =SUM(J4:J{last_data_row})
-Cost:                 =SUM(M4:M{last_data_row})
+Cost:                 =SUM(L4:L{last_data_row})
 Original Fee:         =SUM(N4:N{last_data_row})
 Final Discounted Fee: =SUM(P4:P{last_data_row})
+
+[Reimbursement Summary block — rows below Grand Total]
+Total Labour Cost:       =SUMIF($E$4:$E${last_data_row},"<>EXPENSE",$L$4:$L${last_data_row})
+Total Expenses Cost:     =SUMIF($E$4:$E${last_data_row},"EXPENSE",$L$4:$L${last_data_row})
+Expenses as % of Labour: =Total Expenses Cost / Total Labour Cost  [format as %]
+Reimbursement Cap (15%): =Total Labour Cost * 0.15
+Status:                  =IF(Total Expenses Cost > Reimbursement Cap, "EXCEEDS 15% CAP", "Within limit")
+[Apply red fill to Status cell when condition is TRUE]
 ```
 
 ### Validation Checks
@@ -606,11 +674,18 @@ Final Discounted Fee: =SUM(P4:P{last_data_row})
 Before finalizing effort model:
 - [ ] All stories have effort estimates
 - [ ] All stories have skill assignments
+- [ ] Functional Lead rows added for all requirements gathering and UAT stories
+- [ ] Engagement Lead overhead row present for every sprint (1 day × sprint weeks)
+- [ ] All overhead and expense rows have a sprint number in column A
+- [ ] Expense rows present for all known non-labour costs (infrastructure, LLM, hardware etc.)
+- [ ] All expense rows have Markup % entered (0% for pass-through, >0% for marked-up)
+- [ ] Reimbursement summary block present below Grand Total
+- [ ] Reimbursement Status cell shows "Within limit" (flag if red)
 - [ ] Dependencies are captured
 - [ ] Sprint dates are continuous (no gaps)
 - [ ] Total effort matches story points conversion
-- [ ] Rate card covers all assigned skills
-- [ ] Formulas calculate correctly
+- [ ] Rate card covers all assigned skills (including Functional Lead and Engagement Lead)
+- [ ] Formulas calculate correctly (labour Cost/Original Fee reference Final Effort Days col J; expense Original Fee references Cost × (1 + Markup %))
 - [ ] No sprint exceeds 120% capacity
 
 ## Story Hierarchy

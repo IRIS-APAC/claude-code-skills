@@ -31,7 +31,7 @@ Claude loads this skill when you:
 - **How** to structure acceptance criteria
 - **How** to estimate complexity (T-shirt sizing)
 - **How** to plan and run sprints
-- **How** to generate effort models (rate card, velocity adjuster, discount columns)
+- **How** to generate effort models (rate card, velocity adjuster, markup, discount, expense rows, reimbursement cap)
 
 **Board-agnostic** - Works with any agile board (ZenHub, Jira, Linear, etc.)
 
@@ -75,7 +75,7 @@ Claude loads this skill when you:
 | L    | 8      | 2-4 days |
 | XL   | 13     | 4-8 days (break down!) |
 
-> Note: Time ranges are for estimation only. Effort model billing uses upper bounds (XS=0.25d, S=0.75d, M=2d, L=4d, XL=8d).
+> Note: Time ranges are for estimation only. Effort model billing uses a separate conversion (XS=0.5d, S=1.0d, M=3.0d, L=6.0d, XL=12.0d).
 
 ### Rate Card
 
@@ -83,7 +83,11 @@ Claude loads this skill when you:
 |------|----------|---------|
 | Lead Tech | £1,100 | £2,500 |
 | Engagement Lead | £1,100 | £2,750 |
-| All other roles | £550 | £1,900 |
+| Functional Lead | £550 | £1,900 |
+| Backend Dev | £550 | £1,900 |
+| DevOps Engineer | £550 | £1,900 |
+| DBA | £550 | £1,900 |
+| QA Engineer | £550 | £1,900 |
 
 ### Sprint Planning
 
