@@ -11,6 +11,7 @@ Board-agnostic agile project management workflows and best practices.
 - **references/story-templates.md** - User story format, acceptance criteria examples
 - **references/estimation-guide.md** - T-shirt sizing (XS=1, S=3, M=5, L=8, XL=13), complexity factors
 - **references/sprint-workflows.md** - Sprint planning, daily standup, retrospectives
+- **references/epic-planning.md** - Epic breakdown, dependencies, effort model generation
 
 ## When This Skill Triggers
 
@@ -20,6 +21,8 @@ Claude loads this skill when you:
 - Estimate story points (`"how should we size this story..."`)
 - Plan sprints (`"what stories should we include in the sprint..."`)
 - Break down large stories (`"this story is too big, how should we break it down..."`)
+- Plan epics and releases (`"let's plan the epic..."`)
+- Generate effort models (`"create an effort model for..."`)
 
 ## What This Skill Provides
 
@@ -28,6 +31,7 @@ Claude loads this skill when you:
 - **How** to structure acceptance criteria
 - **How** to estimate complexity (T-shirt sizing)
 - **How** to plan and run sprints
+- **How** to generate effort models (rate card, velocity adjuster, markup, discount, expense rows, reimbursement cap)
 
 **Board-agnostic** - Works with any agile board (ZenHub, Jira, Linear, etc.)
 
@@ -70,6 +74,20 @@ Claude loads this skill when you:
 | M    | 5      | 1-2 days |
 | L    | 8      | 2-4 days |
 | XL   | 13     | 4-8 days (break down!) |
+
+> Note: Time ranges are for estimation only. Effort model billing uses a separate conversion (XS=0.5d, S=1.0d, M=3.0d, L=6.0d, XL=12.0d).
+
+### Rate Card
+
+| Role | Cost/Day (AUD) | Fee/Day (AUD) |
+|------|---------------|---------------|
+| Lead Tech | $1,100 | $2,500 |
+| Engagement Lead | $1,100 | $2,750 |
+| Functional Lead | $550 | $1,900 |
+| Backend Dev | $550 | $1,900 |
+| DevOps Engineer | $550 | $1,900 |
+| DBA | $550 | $1,900 |
+| QA Engineer | $550 | $1,900 |
 
 ### Sprint Planning
 

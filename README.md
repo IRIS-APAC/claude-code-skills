@@ -159,16 +159,27 @@ Board-specific implementation for creating and managing issues.
 
 Board-agnostic agile workflows for refining stories and planning sprints.
 
-**Automatically triggers when:** Refining user stories, creating acceptance criteria, estimating story points, planning sprints or epics
+**Automatically triggers when:** Refining user stories, creating acceptance criteria, estimating story points, planning sprints or epics, generating effort models
 
 **Key features:**
 - Story refinement (takes high-level stories from requirements-design, adds AC and estimates)
 - Story templates (feature, bug, technical)
-- T-shirt sizing (XS=1, S=3, M=5, L=8, XL=13)
+- T-shirt sizing (XS=1, S=3, M=5, L=8, XL=13) — time ranges are for estimation only; effort model uses upper bounds for conservative billing
 - Acceptance criteria best practices
 - Sprint workflows (planning, retrospectives, velocity tracking)
 - Epic planning and story dependencies
 - Release planning across multiple epics
+- **Effort model generation** — formula-based Excel output with the following columns:
+  - Sprint, Start/End Date, Epic, Story ID, Story Title, Story Points
+  - Effort (Days), Velocity Adjuster (%), Final Effort (Days)
+  - Skill, Assignee
+  - Cost, Original Fee, % Discount, Final Discounted Fee
+  - Dependencies, Notes
+- **Rate card** (stored in `docs/Rate_table.csv`, all rates in AUD):
+  - Lead Tech: $1,100/day cost | $2,500/day fee
+  - Engagement Lead: $1,100/day cost | $2,750/day fee
+  - Functional Lead: $550/day cost | $1,900/day fee
+  - All other roles (Backend Dev, DevOps Engineer, DBA, QA Engineer): $550/day cost | $1,900/day fee
 
 **Integration:**
 - Takes initial story list from `/requirements-design` → adds detailed AC, estimates, creates tickets
