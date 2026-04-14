@@ -596,6 +596,39 @@ Use expense rows for non-labour costs: infrastructure, LLM consumption, hardware
 - Add a note at the top of the effort model: `"⚠ Expense estimates require client confirmation"`
 - **Always ask the user** before finalising: *"I've included estimated expense lines for [X, Y, Z]. Can you confirm costs or provide actuals?"*
 
+#### Pricing research — CRITICAL rules
+
+**NEVER estimate infrastructure, LLM, or licence costs from training data alone.** Prices change frequently and training data is always out of date. Instead:
+
+**Step 1 — Ask for specifics before researching**
+
+Always ask the user for the following before attempting to price infrastructure or LLM costs:
+
+| Category | Information needed |
+|---|---|
+| Cloud infrastructure | Provider (Azure/AWS/GCP), region, compute tier, number of environments (dev/staging/prod), storage volume (GB), redundancy requirements, duration |
+| LLM consumption | Provider (Anthropic/OpenAI/Azure OpenAI/Bedrock), model(s), estimated token volume per day/month, dev vs prod split |
+| Hardware | Device type, spec, quantity, procurement method (buy/lease), region |
+| Licences | Tool/service name, tier, number of seats, billing period |
+
+**Step 2 — Use WebSearch to retrieve current pricing**
+
+Once specifics are known, use WebSearch to look up current prices from official sources:
+- **Azure**: `site:azure.microsoft.com/pricing` + service name
+- **AWS**: `site:aws.amazon.com/pricing` + service name
+- **GCP**: `site:cloud.google.com/pricing` + service name
+- **Anthropic**: `site:anthropic.com/pricing`
+- **OpenAI**: `site:openai.com/pricing`
+
+**Step 3 — Document assumptions and source in Notes column**
+
+For every expense row, the Notes column must include:
+- Source URL and date retrieved
+- Key assumptions (tier, region, volume, duration)
+- Confidence level: `Confirmed` / `Estimated — confirm with client` / `TBC`
+
+**Example Notes entry**: `"Azure B2s VM, Australia East, 2 envs × 6 months. Source: azure.microsoft.com/pricing, Apr 2026. Estimated — confirm with client."`
+
 #### Row format
 - **Story ID**: `EXPENSE`
 - **Story Points, Effort (Days), Velocity Adjuster, Final Effort (Days)**: leave blank
@@ -710,6 +743,8 @@ Before finalizing effort model:
 - [ ] Engagement Lead overhead row present for every sprint (1 day × sprint weeks)
 - [ ] All overhead and expense rows have a sprint number in column A
 - [ ] Expense rows present for all known non-labour costs (infrastructure, LLM, hardware etc.)
+- [ ] All expense costs sourced from WebSearch or confirmed by user — not estimated from training data
+- [ ] All expense Notes include source URL, date, assumptions, and confidence level
 - [ ] All expense rows have Markup % entered (0% for pass-through, >0% for marked-up)
 - [ ] Reimbursement summary block present below Grand Total
 - [ ] Reimbursement Status cell shows "Within limit" (flag if red)
