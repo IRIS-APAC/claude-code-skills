@@ -505,9 +505,9 @@ Auto-assign skills based on story content:
 
 ### Rate Card Structure
 
-Maintain rate card in `docs/Rate_table.csv`:
+Maintain rate card in `docs/Rate_table.csv` (all rates in **AUD**):
 ```csv
-Role,Cost Daily Rate,Fee Daily Rate
+Role,Cost Daily Rate (AUD),Fee Daily Rate (AUD)
 Lead Tech,1100,2500
 Backend Dev,550,1900
 DevOps Engineer,550,1900
@@ -611,14 +611,17 @@ Always ask the user for the following before attempting to price infrastructure 
 | Hardware | Device type, spec, quantity, procurement method (buy/lease), region |
 | Licences | Tool/service name, tier, number of seats, billing period |
 
-**Step 2 — Use WebSearch to retrieve current pricing**
+**Step 2 — Use WebSearch to retrieve current pricing in AUD**
 
-Once specifics are known, use WebSearch to look up current prices from official sources:
-- **Azure**: `site:azure.microsoft.com/pricing` + service name
-- **AWS**: `site:aws.amazon.com/pricing` + service name
-- **GCP**: `site:cloud.google.com/pricing` + service name
-- **Anthropic**: `site:anthropic.com/pricing`
-- **OpenAI**: `site:openai.com/pricing`
+Once specifics are known, use WebSearch to look up current prices from official sources. **Always retrieve or convert to AUD** — do not use USD, GBP, or any other currency in the effort model:
+- **Azure**: `site:azure.microsoft.com/en-au/pricing` + service name (use Australian pricing page)
+- **AWS**: `site:aws.amazon.com/pricing` + service name + "Australia"
+- **GCP**: `site:cloud.google.com/pricing` + service name + "Sydney"
+- **Anthropic**: `site:anthropic.com/pricing` — retrieve USD then search current USD→AUD exchange rate to convert
+- **OpenAI**: `site:openai.com/pricing` — retrieve USD then search current USD→AUD exchange rate to convert
+- **Hardware/devices**: search retailer pricing in AUD (e.g. `site:jb.com.au` or `site:apple.com/au`)
+
+If a provider only publishes USD pricing, **always perform a second WebSearch** for the current AUD exchange rate and apply the conversion. Document the rate used in the Notes column.
 
 **Step 3 — Document assumptions and source in Notes column**
 
@@ -627,7 +630,7 @@ For every expense row, the Notes column must include:
 - Key assumptions (tier, region, volume, duration)
 - Confidence level: `Confirmed` / `Estimated — confirm with client` / `TBC`
 
-**Example Notes entry**: `"Azure B2s VM, Australia East, 2 envs × 6 months. Source: azure.microsoft.com/pricing, Apr 2026. Estimated — confirm with client."`
+**Example Notes entry**: `"Azure B2s VM, Australia East, 2 envs × 6 months. AUD pricing. Source: azure.microsoft.com/en-au/pricing, Apr 2026. Estimated — confirm with client."`
 
 #### Row format
 - **Story ID**: `EXPENSE`
@@ -679,7 +682,7 @@ When allocating stories to sprints:
 
 Factor in location for:
 - **Public holidays** - Adjust sprint capacity for holiday weeks
-- **Currency** - Use appropriate currency for cost/fee
+- **Currency** - All costs and fees default to **AUD**; adjust only if client contract specifies otherwise
 - **Rate variations** - Different locations have different rate cards
 
 ### Effort Model Example Structure

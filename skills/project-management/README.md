@@ -79,15 +79,15 @@ Claude loads this skill when you:
 
 ### Rate Card
 
-| Role | Cost/Day | Fee/Day |
-|------|----------|---------|
-| Lead Tech | £1,100 | £2,500 |
-| Engagement Lead | £1,100 | £2,750 |
-| Functional Lead | £550 | £1,900 |
-| Backend Dev | £550 | £1,900 |
-| DevOps Engineer | £550 | £1,900 |
-| DBA | £550 | £1,900 |
-| QA Engineer | £550 | £1,900 |
+| Role | Cost/Day (AUD) | Fee/Day (AUD) |
+|------|---------------|---------------|
+| Lead Tech | $1,100 | $2,500 |
+| Engagement Lead | $1,100 | $2,750 |
+| Functional Lead | $550 | $1,900 |
+| Backend Dev | $550 | $1,900 |
+| DevOps Engineer | $550 | $1,900 |
+| DBA | $550 | $1,900 |
+| QA Engineer | $550 | $1,900 |
 
 ### Sprint Planning
 

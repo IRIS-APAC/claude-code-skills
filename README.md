@@ -175,10 +175,11 @@ Board-agnostic agile workflows for refining stories and planning sprints.
   - Skill, Assignee
   - Cost, Original Fee, % Discount, Final Discounted Fee
   - Dependencies, Notes
-- **Rate card** (stored in `docs/Rate_table.csv`):
-  - Lead Tech: £1,100/day cost | £2,500/day fee
-  - Engagement Lead: £1,100/day cost | £2,750/day fee
-  - All other roles (Backend Dev, DevOps Engineer, DBA, QA Engineer): £550/day cost | £1,900/day fee
+- **Rate card** (stored in `docs/Rate_table.csv`, all rates in AUD):
+  - Lead Tech: $1,100/day cost | $2,500/day fee
+  - Engagement Lead: $1,100/day cost | $2,750/day fee
+  - Functional Lead: $550/day cost | $1,900/day fee
+  - All other roles (Backend Dev, DevOps Engineer, DBA, QA Engineer): $550/day cost | $1,900/day fee
 
 **Integration:**
 - Takes initial story list from `/requirements-design` → adds detailed AC, estimates, creates tickets
