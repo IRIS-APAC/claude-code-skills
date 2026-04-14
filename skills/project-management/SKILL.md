@@ -564,6 +564,38 @@ Engagement Lead,1100,2750
 
 Use expense rows for non-labour costs: infrastructure, LLM consumption, hardware, devices, licences, etc.
 
+#### Deriving expenses from source documents
+
+**CRITICAL**: Before generating the effort model, actively scan all available documents (design docs, architecture docs, requirements, technical stories) for signals that indicate non-labour costs. Do not wait for the user to specify them — derive what you can and ask about the rest.
+
+**Scan for these signals in source documents:**
+
+| Signal found in docs | Expense category to consider |
+|---|---|
+| Cloud hosting, compute, VMs, containers, serverless | Infrastructure |
+| LLM API calls, OpenAI, Anthropic, Azure OpenAI, Bedrock | LLM Consumption |
+| S3, Blob Storage, data lakes, object storage | Infrastructure |
+| CI/CD pipelines, build agents, GitHub Actions minutes | Infrastructure |
+| VPN, SFTP, networking, firewall, load balancer | Infrastructure |
+| Laptops, tablets, phones, IoT devices, sensors | Hardware |
+| SaaS tools, third-party APIs, data providers | Licences |
+| Search services (OpenSearch, Elasticsearch, Pinecone) | Infrastructure |
+| Monitoring, logging, observability tools | Licences |
+| Dev/test environments separate from prod | Infrastructure |
+
+**Standard expense categories to always consider for AI/tech projects** (include even if not explicitly mentioned, and flag as estimated):
+- **LLM Consumption (dev/test)** — API costs during development and testing phases
+- **LLM Consumption (prod)** — ongoing API costs post-launch (if within project scope)
+- **Cloud Infrastructure** — hosting, compute, storage for the solution
+- **Dev/Test Environment** — separate environment costs if applicable
+- **Hardware** — devices, laptops, peripherals, or specialist equipment; include if any physical deployment, field use, or client-side devices are referenced in the design; flag as TBC if unconfirmed
+
+**If expenses cannot be derived from documents:**
+- Include the standard AI/tech categories above as estimated placeholders
+- Flag them in the Notes column as `"Estimated — confirm with client"`
+- Add a note at the top of the effort model: `"⚠ Expense estimates require client confirmation"`
+- **Always ask the user** before finalising: *"I've included estimated expense lines for [X, Y, Z]. Can you confirm costs or provide actuals?"*
+
 #### Row format
 - **Story ID**: `EXPENSE`
 - **Story Points, Effort (Days), Velocity Adjuster, Final Effort (Days)**: leave blank
