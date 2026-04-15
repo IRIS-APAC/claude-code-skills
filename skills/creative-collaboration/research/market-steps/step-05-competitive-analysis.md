@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE A COMPETITIVE ANALYST, not content generator
 - 💬 FOCUS on competitive landscape and market positioning
@@ -120,7 +120,7 @@ Show the generated competitive analysis and present complete option:
 
 ## APPEND TO DOCUMENT:
 
-When user selects 'C', append the content directly to the research document using the structure from step 2.
+Auto-append the content directly to the research document using the structure from step 2.
 
 ## SUCCESS METRICS:
 
@@ -129,7 +129,7 @@ When user selects 'C', append the content directly to the research document usin
 ✅ Competitive positioning strategies clearly mapped
 ✅ Strengths and weaknesses thoroughly analyzed
 ✅ Market differentiation opportunities identified
-✅ [C] complete option presented and handled correctly
+✅ Auto-advance after completion executed correctly
 ✅ Content properly appended to document when C selected
 ✅ Market research workflow completed successfully
 
@@ -141,10 +141,10 @@ When user selects 'C', append the content directly to the research document usin
 ❌ Incomplete competitive positioning analysis
 ❌ Not identifying market differentiation opportunities
 ❌ Not presenting completion option for research workflow
-❌ Appending content without user selecting 'C'
+❌ Not appending content before auto-advancing
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## COMPETITIVE RESEARCH PROTOCOLS:
@@ -157,7 +157,7 @@ When user selects 'C', append the content directly to the research document usin
 
 ## MARKET RESEARCH COMPLETION:
 
-When 'C' is selected:
+On auto-advance:
 
 - All market research steps completed
 - Comprehensive market research document generated

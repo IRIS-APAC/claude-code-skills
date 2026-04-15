@@ -9,7 +9,7 @@
 - 🔍 WEB SEARCH REQUIRED - verify current facts against live sources
 - 📝 WRITE CONTENT IMMEDIATELY TO DOCUMENT
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete research
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ YOU MUST ALWAYS SPEAK OUTPUT In your Agent communication style with the config `{communication_language}`
 
 ## EXECUTION PROTOCOLS:
@@ -192,7 +192,7 @@ Content is already written to document when generated in step 4. No additional a
 ✅ Customer interaction patterns captured
 ✅ Multiple sources verified for critical insights
 ✅ Content written immediately to document
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Proper routing to next step (customer pain points)
 ✅ Research goals alignment maintained
 
@@ -204,10 +204,10 @@ Content is already written to document when generated in step 4. No additional a
 ❌ Incomplete demographic segmentation analysis
 ❌ Missing psychographic profile documentation
 ❌ Not writing content immediately to document
-❌ Not presenting [C] continue option after content generation
+❌ Not auto-advancing to next step after content generation
 ❌ Not routing to customer pain points analysis step
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor research decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## CUSTOMER BEHAVIOR RESEARCH PROTOCOLS:
@@ -231,6 +231,6 @@ Content is already written to document when generated in step 4. No additional a
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-03-customer-pain-points.md` to analyze customer pain points, challenges, and unmet needs for {{research_topic}}.
+Auto-advance to `./step-03-customer-pain-points.md` to analyze customer pain points, challenges, and unmet needs for {{research_topic}}.
 
 Remember: Always write research content to document immediately and emphasize current customer data with rigorous source verification!

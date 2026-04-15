@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE A DOMAIN RESEARCH STRATEGIST, not content generator
 - 💬 FOCUS on comprehensive synthesis and authoritative conclusions
@@ -16,7 +16,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show web search analysis before presenting findings
-- ⚠️ Present [C] complete option after synthesis content generation
+- ⚠️ Auto-advance after final content generation
 - 💾 Auto-complete after writing final content to document
 - 📖 Update frontmatter `stepsCompleted: [1, 2, 3, 4, 5, 6]` before completing workflow
 - 🚫 FORBIDDEN to skip final document generation
@@ -380,7 +380,7 @@ _This comprehensive research document serves as an authoritative reference on {{
 
 ## APPEND TO DOCUMENT:
 
-When user selects 'C', append the complete comprehensive research document using the full structure above.
+Auto-append the complete comprehensive research document using the full structure above.
 
 ## SUCCESS METRICS:
 
@@ -391,7 +391,7 @@ When user selects 'C', append the complete comprehensive research document using
 ✅ Strategic recommendations grounded in comprehensive research
 ✅ Complete source verification with citations
 ✅ Professional document structure and compelling narrative
-✅ [C] complete option presented and handled correctly
+✅ Auto-advance after completion executed correctly
 ✅ Domain research workflow completed with comprehensive document
 
 ## FAILURE MODES:
@@ -406,7 +406,7 @@ When user selects 'C', append the complete comprehensive research document using
 ❌ Not presenting completion option for final document
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## COMPREHENSIVE DOCUMENT STANDARDS:
@@ -422,7 +422,7 @@ This step ensures the final research document:
 
 ## DOMAIN RESEARCH WORKFLOW COMPLETION:
 
-When 'C' is selected:
+On auto-advance:
 
 - All domain research steps completed (1-5)
 - Comprehensive domain research document generated

@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without user confirmation
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ FOCUS EXCLUSIVELY on confirming domain research scope and approach
 - 📋 YOU ARE A DOMAIN RESEARCH PLANNER, not content generator
 - 💬 ACKNOWLEDGE and CONFIRM understanding of domain research goals
@@ -15,7 +15,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show your analysis before taking any action
-- ⚠️ Present [C] continue option after scope confirmation
+- ⚠️ Auto-advance to next step after scope is documented
 - 💾 Auto-advance to next step after scope is documented
 - 📖 Update frontmatter `stepsCompleted: [1]` before loading next step
 - 🚫 FORBIDDEN to skip scope documentation before advancing
@@ -81,7 +81,7 @@ For **{{research_topic}}**, I will research:
 
 ## APPEND TO DOCUMENT:
 
-When user selects 'C', append scope confirmation:
+Append scope confirmation before auto-advancing:
 
 ```markdown
 ## Domain Research Scope Confirmation
@@ -112,7 +112,7 @@ When user selects 'C', append scope confirmation:
 ✅ Domain research scope clearly confirmed with user
 ✅ All domain analysis areas identified and explained
 ✅ Research methodology emphasized
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Scope confirmation documented when user proceeds
 ✅ Proper routing to next domain research step
 
@@ -121,16 +121,16 @@ When user selects 'C', append scope confirmation:
 ❌ Not clearly confirming domain research scope with user
 ❌ Missing critical domain analysis areas
 ❌ Not explaining that web search is required for current facts
-❌ Not presenting [C] continue option
-❌ Proceeding without user scope confirmation
+❌ Not auto-advancing to next step
+❌ Proceeding without documenting scope confirmation
 ❌ Not routing to next domain research step
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-02-domain-analysis.md` to begin industry analysis.
+Auto-advance to `./step-02-domain-analysis.md` to begin industry analysis.
 
 Remember: This is SCOPE CONFIRMATION ONLY - no actual domain research yet, just confirming the research approach and scope!

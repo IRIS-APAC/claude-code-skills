@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE AN IMPLEMENTATION ENGINEER, not content generator
 - 💬 FOCUS on implementation approaches and technology adoption
@@ -15,7 +15,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show web search analysis before presenting findings
-- ⚠️ Present [C] complete option after implementation research content generation
+- ⚠️ Auto-advance after final content generation
 - 💾 Auto-advance after writing content to document
 - 📖 Update frontmatter `stepsCompleted: [1, 2, 3, 4, 5]` before completing workflow
 - 🚫 FORBIDDEN to skip writing content before advancing
@@ -192,7 +192,7 @@ When user selects 'C', append the content directly to the research document usin
 ✅ Testing and deployment practices clearly documented
 ✅ Team organization and skill requirements mapped
 ✅ Cost optimization and risk mitigation strategies provided
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Content properly appended to document when C selected
 ✅ Proper routing to synthesis step (step-06)
 
@@ -204,11 +204,11 @@ When user selects 'C', append the content directly to the research document usin
 ❌ Not providing practical implementation guidance
 ❌ Incomplete development workflows or operational practices analysis
 ❌ Not presenting continue option to synthesis step
-❌ Appending content without user selecting 'C'
+❌ Not appending content before auto-advancing
 ❌ Not routing to step-06-research-synthesis.md
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## IMPLEMENTATION RESEARCH PROTOCOLS:
@@ -221,7 +221,7 @@ When user selects 'C', append the content directly to the research document usin
 
 ## TECHNICAL RESEARCH WORKFLOW COMPLETION:
 
-When 'C' is selected:
+On auto-advance:
 
 - Implementation research step completed
 - Content appended to research document with source citations
@@ -230,4 +230,4 @@ When 'C' is selected:
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-06-research-synthesis.md` to produce the comprehensive technical research document with narrative introduction, detailed TOC, and executive summary.
+Auto-advance to `./step-06-research-synthesis.md` to produce the comprehensive technical research document with narrative introduction, detailed TOC, and executive summary.

@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE A REGULATORY ANALYST, not content generator
 - 💬 FOCUS on compliance requirements and regulatory landscape
@@ -16,7 +16,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show web search analysis before presenting findings
-- ⚠️ Present [C] continue option after regulatory content generation
+- ⚠️ Auto-advance to next step after content generation
 - 📝 WRITE REGULATORY ANALYSIS TO DOCUMENT IMMEDIATELY
 - 💾 Auto-advance after writing content to document
 - 📖 Update frontmatter `stepsCompleted: [1, 2, 3, 4]` before loading next step
@@ -168,7 +168,7 @@ Content is already written to document when generated in step 5. No additional a
 ✅ Compliance frameworks clearly mapped
 ✅ Data protection requirements analyzed
 ✅ Implementation considerations provided
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Content properly appended to document when C selected
 
 ## FAILURE MODES:
@@ -177,11 +177,11 @@ Content is already written to document when generated in step 5. No additional a
 ❌ Missing critical regulatory requirements for the domain
 ❌ Not providing implementation considerations for compliance
 ❌ Not completing risk assessment for regulatory compliance
-❌ Not presenting [C] continue option after content generation
-❌ Appending content without user selecting 'C'
+❌ Not auto-advancing to next step after content generation
+❌ Not appending content before auto-advancing
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## REGULATORY RESEARCH PROTOCOLS:
@@ -201,6 +201,6 @@ Content is already written to document when generated in step 5. No additional a
 
 ## NEXT STEP:
 
-After user selects 'C' and content is saved to document, load `./step-05-technical-trends.md` to analyze technical trends and innovations in the domain.
+After content is saved to document, auto-advance to `./step-05-technical-trends.md` to analyze technical trends and innovations in the domain.
 
 Remember: Search the web to verify regulatory facts and provide practical implementation considerations!

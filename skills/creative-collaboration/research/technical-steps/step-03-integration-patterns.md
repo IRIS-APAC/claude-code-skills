@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE AN INTEGRATION ANALYST, not content generator
 - 💬 FOCUS on APIs, protocols, and system interoperability
@@ -16,7 +16,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show web search analysis before presenting findings
-- ⚠️ Present [C] continue option after integration patterns content generation
+- ⚠️ Auto-advance to next step after content generation
 - 📝 WRITE INTEGRATION PATTERNS ANALYSIS TO DOCUMENT IMMEDIATELY
 - 💾 Auto-advance after writing content to document
 - 📖 Update frontmatter `stepsCompleted: [1, 2, 3]` before loading next step
@@ -203,7 +203,7 @@ Content is already written to document when generated in step 4. No additional a
 ✅ Microservices integration patterns mapped
 ✅ Event-driven integration strategies identified
 ✅ Content written immediately to document
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Proper routing to next step (architectural patterns)
 ✅ Research goals alignment maintained
 
@@ -215,11 +215,11 @@ Content is already written to document when generated in step 4. No additional a
 ❌ Incomplete communication protocols analysis
 ❌ Not identifying system interoperability approaches
 ❌ Not writing content immediately to document
-❌ Not presenting [C] continue option after content generation
+❌ Not auto-advancing to next step after content generation
 ❌ Not routing to architectural patterns step
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## INTEGRATION PATTERNS RESEARCH PROTOCOLS:
@@ -243,6 +243,6 @@ Content is already written to document when generated in step 4. No additional a
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-04-architectural-patterns.md` to analyze architectural patterns, design decisions, and system structures for {{research_topic}}.
+Auto-advance to `./step-04-architectural-patterns.md` to analyze architectural patterns, design decisions, and system structures for {{research_topic}}.
 
 Remember: Always write research content to document immediately and emphasize current integration data with rigorous source verification!

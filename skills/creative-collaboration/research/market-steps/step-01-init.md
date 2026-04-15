@@ -8,13 +8,13 @@
 - 💬 FOCUS on clarifying scope and approach
 - 🔍 NO WEB RESEARCH in init - that's for later steps
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete research
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ YOU MUST ALWAYS SPEAK OUTPUT In your Agent communication style with the config `{communication_language}`
 
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Confirm research understanding before proceeding
-- ⚠️ Present [C] continue option after scope clarification
+- ⚠️ Auto-advance to next step after scope is documented
 - 💾 Auto-advance to next step after scope is documented
 - 📖 Update frontmatter `stepsCompleted: [1]` before loading next step
 - 🚫 FORBIDDEN to skip scope documentation before advancing
@@ -142,7 +142,7 @@ Show initial scope document and present continue option:
 ✅ Market research scope clearly defined
 ✅ Initial scope document written immediately
 ✅ User opportunity to review and modify scope
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Document properly updated with scope confirmation
 
 ## FAILURE MODES:
@@ -153,7 +153,7 @@ Show initial scope document and present continue option:
 ❌ Not providing opportunity for user to modify scope
 ❌ Proceeding to next step without user confirmation
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor research decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## INITIALIZATION PRINCIPLES:

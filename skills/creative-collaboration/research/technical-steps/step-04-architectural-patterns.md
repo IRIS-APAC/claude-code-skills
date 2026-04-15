@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE A SYSTEMS ARCHITECT, not content generator
 - 💬 FOCUS on architectural patterns and design decisions
@@ -16,7 +16,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show web search analysis before presenting findings
-- ⚠️ Present [C] continue option after architectural patterns content generation
+- ⚠️ Auto-advance to next step after content generation
 - 📝 WRITE ARCHITECTURAL PATTERNS ANALYSIS TO DOCUMENT IMMEDIATELY
 - 💾 Auto-advance after writing content to document
 - 📖 Update frontmatter `stepsCompleted: [1, 2, 3, 4]` before loading next step
@@ -160,7 +160,7 @@ Show the generated architectural patterns and present continue option:
 
 ## APPEND TO DOCUMENT:
 
-When user selects 'C', append the content directly to the research document using the structure from step 5.
+Auto-append the content directly to the research document using the structure from step 5.
 
 ## SUCCESS METRICS:
 
@@ -169,7 +169,7 @@ When user selects 'C', append the content directly to the research document usin
 ✅ Scalability and performance patterns thoroughly mapped
 ✅ Integration and communication patterns captured
 ✅ Security and data architecture considerations analyzed
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Content properly appended to document when C selected
 ✅ Proper routing to implementation research step
 
@@ -180,11 +180,11 @@ When user selects 'C', append the content directly to the research document usin
 ❌ Missing critical system architecture patterns
 ❌ Not analyzing design trade-offs and considerations
 ❌ Incomplete scalability or performance patterns analysis
-❌ Not presenting [C] continue option after content generation
-❌ Appending content without user selecting 'C'
+❌ Not auto-advancing to next step after content generation
+❌ Not appending content before auto-advancing
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## ARCHITECTURAL RESEARCH PROTOCOLS:
@@ -197,6 +197,6 @@ When user selects 'C', append the content directly to the research document usin
 
 ## NEXT STEP:
 
-After user selects 'C' and content is saved to document, load `./step-05-implementation-research.md` to focus on implementation approaches and technology adoption.
+After content is saved to document, auto-advance to `./step-05-implementation-research.md` to focus on implementation approaches and technology adoption.
 
 Remember: Always emphasize current architectural data and rigorous source verification!

@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE AN INDUSTRY ANALYST, not content generator
 - 💬 FOCUS on market size, growth, and industry dynamics
@@ -16,7 +16,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show web search analysis before presenting findings
-- ⚠️ Present [C] continue option after industry analysis content generation
+- ⚠️ Auto-advance to next step after content generation
 - 📝 WRITE INDUSTRY ANALYSIS TO DOCUMENT IMMEDIATELY
 - 💾 Auto-advance after writing content to document
 - 📖 Update frontmatter `stepsCompleted: [1, 2]` before loading next step
@@ -185,7 +185,7 @@ Content is already written to document when generated in step 4. No additional a
 ✅ Competitive dynamics clearly mapped
 ✅ Multiple sources verified for critical insights
 ✅ Content written immediately to document
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Proper routing to next step (competitive landscape)
 ✅ Research goals alignment maintained
 
@@ -196,11 +196,11 @@ Content is already written to document when generated in step 4. No additional a
 ❌ Incomplete market structure analysis
 ❌ Not identifying key industry trends
 ❌ Not writing content immediately to document
-❌ Not presenting [C] continue option after content generation
+❌ Not auto-advancing to next step after content generation
 ❌ Not routing to competitive landscape step
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## INDUSTRY RESEARCH PROTOCOLS:
@@ -224,6 +224,6 @@ Content is already written to document when generated in step 4. No additional a
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-03-competitive-landscape.md` to analyze competitive landscape, key players, and ecosystem analysis for {{research_topic}}.
+Auto-advance to `./step-03-competitive-landscape.md` to analyze competitive landscape, key players, and ecosystem analysis for {{research_topic}}.
 
 Remember: Always write research content to document immediately and search the web to verify facts!

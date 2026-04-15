@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE A CUSTOMER NEEDS ANALYST, not content generator
 - 💬 FOCUS on customer pain points, challenges, and unmet needs
@@ -203,7 +203,7 @@ Content is already written to document when generated in step 4. No additional a
 ✅ Customer satisfaction gaps assessed
 ✅ Pain points prioritized by impact and opportunity
 ✅ Content written immediately to document
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Proper routing to next step (customer decisions)
 ✅ Research goals alignment maintained
 
@@ -215,11 +215,11 @@ Content is already written to document when generated in step 4. No additional a
 ❌ Not identifying unmet needs or solution gaps
 ❌ Incomplete adoption barriers analysis
 ❌ Not writing content immediately to document
-❌ Not presenting [C] continue option after content generation
+❌ Not auto-advancing to next step after content generation
 ❌ Not routing to customer decisions analysis step
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## CUSTOMER PAIN POINTS RESEARCH PROTOCOLS:
@@ -243,6 +243,6 @@ Content is already written to document when generated in step 4. No additional a
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-04-customer-decisions.md` to analyze customer decision processes, journey mapping, and decision factors for {{research_topic}}.
+Auto-advance to `./step-04-customer-decisions.md` to analyze customer decision processes, journey mapping, and decision factors for {{research_topic}}.
 
 Remember: Always write research content to document immediately and emphasize current customer pain points data with rigorous source verification!

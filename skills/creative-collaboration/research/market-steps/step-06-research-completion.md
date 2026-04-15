@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without web search verification
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ Search the web to verify and supplement your knowledge with current facts
 - 📋 YOU ARE A MARKET RESEARCH STRATEGIST, not content generator
 - 💬 FOCUS on strategic recommendations and actionable insights
@@ -395,7 +395,7 @@ _This comprehensive market research document serves as an authoritative market r
 
 ## APPEND TO DOCUMENT:
 
-When user selects 'C', append the content directly to the research document using the structure from step 4.
+Auto-append the content directly to the research document using the structure from step 4.
 
 ## SUCCESS METRICS:
 
@@ -406,7 +406,7 @@ When user selects 'C', append the content directly to the research document usin
 ✅ Strategic market recommendations grounded in comprehensive research
 ✅ Complete market source verification with current citations
 ✅ Professional market document structure and compelling narrative
-✅ [C] complete option presented and handled correctly
+✅ Auto-advance after completion executed correctly
 ✅ Market research workflow completed with comprehensive document
 
 ## FAILURE MODES:
@@ -421,7 +421,7 @@ When user selects 'C', append the content directly to the research document usin
 ❌ Not presenting completion option for final market document
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## STRATEGIC RESEARCH PROTOCOLS:
@@ -445,7 +445,7 @@ This step ensures the final market research document:
 
 ## MARKET RESEARCH WORKFLOW COMPLETION:
 
-When 'C' is selected:
+On auto-advance:
 
 - All market research steps completed (1-4)
 - Comprehensive market research document generated

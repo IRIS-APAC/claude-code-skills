@@ -5,7 +5,7 @@
 - 🛑 NEVER generate content without user confirmation
 
 - 📖 CRITICAL: ALWAYS read the complete step file before taking any action - partial understanding leads to incomplete decisions
-- 🔄 CRITICAL: When loading next step with 'C', ensure the entire file is read and understood before proceeding
+- 🔄 CRITICAL: When auto-advancing to next step, ensure the entire file is read and understood before proceeding
 - ✅ FOCUS EXCLUSIVELY on confirming technical research scope and approach
 - 📋 YOU ARE A TECHNICAL RESEARCH PLANNER, not content generator
 - 💬 ACKNOWLEDGE and CONFIRM understanding of technical research goals
@@ -15,7 +15,7 @@
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show your analysis before taking any action
-- ⚠️ Present [C] continue option after scope confirmation
+- ⚠️ Auto-advance to next step after scope is documented
 - 💾 Auto-advance to next step after scope is documented
 - 📖 Update frontmatter `stepsCompleted: [1]` before loading next step
 - 🚫 FORBIDDEN to skip scope documentation before advancing
@@ -82,7 +82,7 @@ For **{{research_topic}}**, I will research:
 
 ## APPEND TO DOCUMENT:
 
-When user selects 'C', append scope confirmation:
+Append scope confirmation before auto-advancing:
 
 ```markdown
 ## Technical Research Scope Confirmation
@@ -113,7 +113,7 @@ When user selects 'C', append scope confirmation:
 ✅ Technical research scope clearly confirmed with user
 ✅ All technical analysis areas identified and explained
 ✅ Research methodology emphasized
-✅ [C] continue option presented and handled correctly
+✅ Auto-advance to next step executed correctly
 ✅ Scope confirmation documented when user proceeds
 ✅ Proper routing to next technical research step
 
@@ -122,16 +122,16 @@ When user selects 'C', append scope confirmation:
 ❌ Not clearly confirming technical research scope with user
 ❌ Missing critical technical analysis areas
 ❌ Not explaining that web search is required for current facts
-❌ Not presenting [C] continue option
-❌ Proceeding without user scope confirmation
+❌ Not auto-advancing to next step
+❌ Proceeding without documenting scope confirmation
 ❌ Not routing to next technical research step
 
 ❌ **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
-❌ **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
+❌ **CRITICAL**: Auto-advancing without fully reading and understanding the next step file
 ❌ **CRITICAL**: Making decisions without complete understanding of step requirements and protocols
 
 ## NEXT STEP:
 
-After user selects 'C', load `./step-02-technical-overview.md` to begin technology stack analysis.
+Auto-advance to `./step-02-technical-overview.md` to begin technology stack analysis.
 
 Remember: This is SCOPE CONFIRMATION ONLY - no actual technical research yet, just confirming the research approach and scope!
