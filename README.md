@@ -41,7 +41,7 @@ The install script creates symlinks from `~/.claude/skills/` and `~/.claude/comm
 ./install_codex.sh
 ```
 
-This installs skills into `$CODEX_HOME/skills` (defaults to `~/.codex/skills`). Restart Codex to pick up new skills.
+This installs skills into `$CODEX_HOME/skills` (defaults to `~/.codex/skills`) and enables them in `$CODEX_HOME/config.toml`. Restart Codex to pick up new skills.
 
 **Windows (PowerShell):**
 
@@ -93,7 +93,8 @@ The Codex install script (`install_codex.sh`):
 1. Creates `$CODEX_HOME/skills/` (defaults to `~/.codex/skills/`) if it doesn't exist
 2. Creates a folder per skill in `$CODEX_HOME/skills/` and symlinks the skill resources from this repo
 3. Writes a Codex-compatible `SKILL.md` (frontmatter is only `name` and `description`)
-4. Does not install `commands/` (Codex uses skills, not Claude Code slash-commands)
+4. Enables each installed skill in `$CODEX_HOME/config.toml`
+5. Does not install `commands/` (Codex uses skills, not Claude Code slash-commands)
 
 ## Per-Project Setup
 
