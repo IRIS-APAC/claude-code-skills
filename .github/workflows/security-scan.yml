@@ -1,0 +1,90 @@
+name: Security Scan
+
+# Runs Semgrep CE (SAST) and Trivy (SCA + IaC + secrets + misconfig) on every
+# PR and every push to mainline branches. SARIF output is uploaded as a
+# workflow artefact (14-day retention). The build fails when either scanner
+# reports high-severity findings (Semgrep ERROR / Trivy HIGH,CRITICAL).
+# No secrets or tokens required — both scanners use public rulesets and
+# databases.
+
+on:
+  pull_request:
+  push:
+    branches: [main, master, develop, dev]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  semgrep:
+    name: Semgrep CE (SAST)
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Semgrep scan (all severities, report only)
+        run: |
+          semgrep scan \
+            --config p/ci \
+            --config p/security-audit \
+            --config p/owasp-top-ten \
+            --sarif --output semgrep.sarif \
+            --metrics=off
+
+      - name: Upload Semgrep SARIF artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-results
+          path: semgrep.sarif
+          retention-days: 14
+
+      - name: Gate on high-severity findings
+        run: |
+          semgrep scan \
+            --config p/ci \
+            --config p/security-audit \
+            --config p/owasp-top-ten \
+            --severity ERROR --error \
+            --metrics=off
+
+  trivy:
+    name: Trivy (SCA + IaC + secrets + misconfig)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trivy filesystem scan (gates on HIGH/CRITICAL)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,misconfig,secret
+          severity: HIGH,CRITICAL
+          # trivy-action reports/gates on ALL severities in SARIF mode unless this
+          # is set — without it the job fails on MEDIUM/LOW despite `severity` above.
+          limit-severities-for-sarif: true
+          format: sarif
+          output: trivy.sarif
+          exit-code: '1'
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
+
+      - name: Upload Trivy SARIF artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-results
+          path: trivy.sarif
+          retention-days: 14
