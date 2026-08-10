@@ -2,16 +2,33 @@
 
 Review a pull request for code quality and standards.
 
+## Arguments
+
+- **PR number** (optional): When provided (e.g. `pr-review 42` or "review PR 42"), review that specific PR. You **must** switch to that branch before reviewing: `gh pr checkout <PR#>`
+
 ## Instructions
 
-When this command is invoked, load the **git-workflow** skill for:
-- Complete PR review checklist (code quality, testing, documentation, architecture, git)
-- Review best practices and guidelines
-- Feedback templates
+When this command is invoked:
 
-Additionally, load the **testing** skill for:
-- Test coverage verification
-- Test quality assessment
+1. **If a PR number is specified**: Switch to that branch before reviewing:
+   ```bash
+   gh pr checkout <PR#>
+   ```
+
+2. **Complete the PR test plan before review**:
+   - Verify the PR description includes a **Testing** section (or equivalent test plan)
+   - All test plan tasks must be **checked off** (`[x]`) before proceeding to approve
+   - Do not approve until every test plan item is verified and marked complete
+   - If any test plan checkboxes remain `[ ]`, request the author to complete them before approving
+
+3. Load the **git-workflow** skill for:
+   - Complete PR review checklist (code quality, testing, documentation, architecture, git)
+   - Review best practices and guidelines
+   - Feedback templates
+
+   Additionally, load the **testing** skill for:
+   - Test coverage verification
+   - Test quality assessment
 
 ## Approval Requirements
 
