@@ -59,6 +59,8 @@ The same applies to mitigations and owners. A mitigation must name the mechanism
 - Configuration and code must be applied in a particular order. Establish what the wrong order does.
 - Automation, triggers, or schedules resume after deployment. Establish whether verification completes before they do.
 - A step cannot be reversed because its effect has already left the system. This must be named in the register and in the rollback field.
+- The deploy starts automatically — on push, merge, tag, release or schedule — rather than from a manual dispatch after approval.
+- The pipeline cannot return production to the previous version: it takes no version input and no exact revert is possible.
 
 ### Load and performance
 

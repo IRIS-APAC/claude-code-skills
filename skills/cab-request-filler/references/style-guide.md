@@ -16,12 +16,13 @@ Writing rules for CAB submissions. These are stated in full so they can be follo
 - **One term per concept throughout the submission.** If a component has a name, use that name every time. Do not alternate between the service name, the repository name, and a colloquial shorthand.
 - **One referent for the team.** Pick we, the delivery team, or named individuals, and hold it consistent within a field.
 - **Expand every acronym on first use** in each field. Fields are read independently and often out of order.
-- **No emoji, and no decorative characters** used to structure text. Numbered lists and short headings carry structure.
+- **No emoji, and no decorative characters** used to structure text. Numbered lists and short headings carry structure. The one exception is Testing Completed, where ✅ and ❌ mirror the form's checkboxes.
 
 ## Numbers, dates, and identifiers
 
 - Give timezones with every time.
 - Give versions, branches, and commit identifiers exactly as they appear in the repository.
+- Describe each change in plain words. A ticket, PR or change reference may follow as an identifier, never in place of the description.
 - Give counts where a count is knowable. Where it is not, say so rather than gesturing at scale.
 
 ## How much detail each field warrants
@@ -30,8 +31,8 @@ Writing rules for CAB submissions. These are stated in full so they can be follo
 - **What is being deployed**: enough for a technically literate reader who has not seen the code to understand what changes in production and why it carries risk. Group by component. Distinguish behavioural change from implementation change. Implementation detail belongs in the attached deployment document.
 - **Deployment steps**: an ordered list, one action per step, naming the actual mechanism and the parameters that matter. Written so a competent colleague who is not the author could execute it.
 - **Verification steps**: an ordered list, one check per step. Each names where to look and what signal confirms success.
-- **Rollback steps**: an ordered list or short paragraphs, one per rollback path. Names the mechanism, states data reversibility, states execution time, and names anything that cannot be reversed.
-- **Top risk summary**: one sentence. Not a paragraph, not a list.
+- **Rollback steps**: one ordered list — a single procedure back to the previously-live version. Names the mechanism and the version, states data reversibility, states execution time, and names anything that cannot be reversed.
+- **Top risk summary**: one short paragraph — the two or three most severe risks, R1 first, what covers them, and any known gap. Not a list.
 - **Register rows**: one or two sentences per cell. Specific to the component affected.
 - **Security fields**: the selection, with any compensating control described in the deployment description rather than argued in the security field.
 

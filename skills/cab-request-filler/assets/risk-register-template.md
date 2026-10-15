@@ -2,7 +2,7 @@
 
 Fill in both tables below. Keep the headers and column order exactly as given —
 the CAB reads these registers side by side across submissions. The completion
-rules live in Step 4 of `SKILL.md`; this file is only the empty skeleton.
+rules live in Step 6 of `SKILL.md`; this file is only the empty skeleton.
 
 ## Change metadata
 

@@ -15,7 +15,7 @@ Reusable Claude Code skills and commands for agile project management and develo
 - **project-management** - Story templates, estimation, sprint planning, epic planning
 - **developer-analysis** - Engineering analysis before implementation
 - **testing** - Testing strategy, coverage analysis, and quality assurance
-- **cab-request** - Prepare a CAB request: form answers, testing evidence, deployment document and risk register
+- **cab-request-filler** - Draft a CAB request: all form answers, testing evidence, deployment document and risk register
 
 ## Installation
 

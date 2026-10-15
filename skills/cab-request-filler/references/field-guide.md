@@ -114,7 +114,7 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 ## Section 3 — Testing
 
-### Q9. Testing Completed — multiple choice (Unit Testing / Code coverage > 80% / UAT Testing), required
+### Q9. Testing Completed — multiple choice (Unit Testing / Code coverage > 80% / UAT Testing / Other), required
 
 **What it is asking.** Which categories of verification have actually been completed, so the CAB can weigh how much confidence the change has earned before production.
 
@@ -123,6 +123,8 @@ For each field: what the CAB is actually trying to establish, where the answer i
 **Passes when** every ticked option reflects work that has been completed and can be evidenced.
 
 **Sent back when** an option is ticked because it is planned, in progress, or usually done. Coverage above eighty per cent requires a coverage figure, not an impression. UAT requires that user acceptance testing occurred, not that the change was demonstrated to someone.
+
+**Not a checklist to complete.** One ticked option is enough, and it can be Other. Security scans, fixture harnesses, infrastructure plan runs and end-to-end runs belong under Other, each with its result.
 
 ---
 
@@ -180,9 +182,9 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 **Where the answer is found.** The deployment document; pipeline and workflow definitions; infrastructure-as-code plans; migration files; deployment scripts and their parameters.
 
-**Passes when** it is an ordered sequence naming the actual mechanism for each step — pipeline, workflow, script, or command, with the parameters that matter; places any dry-run, plan, or staging step before the step it de-risks; states the required order where components or configuration must be applied in sequence; and names any automation, trigger, or schedule that must be disabled before deployment and re-enabled after verification.
+**Passes when** it is an ordered sequence naming the actual mechanism for each step — pipeline, workflow, script, or command, with the parameters that matter; places any dry-run, plan, or staging step before the step it de-risks; states the required order where components or configuration must be applied in sequence; and names any automation, trigger, or schedule that must be disabled before deployment and re-enabled after verification. The deploy starts from a manual dispatch after approval.
 
-**Sent back when** steps are described in intent rather than mechanism; ordering is left implicit where it matters; or a disable step appears with no corresponding re-enable.
+**Sent back when** steps are described in intent rather than mechanism; ordering is left implicit where it matters; a disable step appears with no corresponding re-enable; or the pipeline deploys on push, merge, tag, release or schedule rather than from a manual dispatch.
 
 ---
 
@@ -204,9 +206,9 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 **Where the answer is found.** Migration files and whether down-migrations exist; infrastructure-as-code state and versioning; artefact or release versioning; configuration versioning and retention; the deployment document.
 
-**Passes when** it names the specific mechanism for each rollback path — the pipeline, workflow, artefact version, configuration pointer, or migration to be applied; states whether data changes are reversible, and where they are not, says so plainly; states how long execution takes, so the CAB can judge it against the window; distinguishes paths that differ, such as configuration versus application rollback; names anything that must not be reversed because the effect has already left the system; and states what is monitored after rollback to confirm recovery.
+**Passes when** it is one numbered procedure that returns production to the previously-live version, named by tag, commit or image, through the same pipeline that deployed the release — by redeploying that version or by an exact revert, as defined under Rollback in SKILL.md; covers configuration and data as steps within that procedure, stating whether data changes are reversible and, where they are not, saying so plainly; states how long execution takes, including review and merge time for a revert, so the CAB can judge it against the window; names anything that must not be reversed because the effect has already left the system; and re-runs the PVT steps to confirm recovery.
 
-**Sent back when** rollback is described as redeploying the previous version without naming what that version is or where it comes from; data reversibility is unaddressed where the change includes a migration or backfill; or no execution time is given. Per the guardrails in SKILL.md, no rollback mechanism means the change is not ready.
+**Sent back when** it offers a menu of options rather than one procedure; it relies on a hand-written fix, a roll-forward, or manual console changes; it describes redeploying the previous version without naming what that version is or where it comes from; data reversibility is unaddressed where the change includes a migration or backfill; or no execution time is given. Per the guardrails in SKILL.md, no rollback route means the change is not ready.
 
 ---
 
@@ -236,15 +238,15 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 ### Q19. Top Risk Summary — multi-line, required
 
-**What it is asking.** The one risk the CAB should hold in mind while reading the rest of the submission — and whether it has been dealt with. It is a triage signal, not a summary of all risks.
+**What it is asking.** The few risks the CAB should hold in mind while reading the rest of the submission — and whether they have been dealt with. It is a triage signal, not a summary of all risks.
 
-**Where the answer is found.** The most severe row of the completed register.
+**Where the answer is found.** The most severe rows of the completed register.
 
-**Passes when** it is a single sentence naming what could go wrong and how it is mitigated, and corresponds to R1 in the register.
+**Passes when** it is a short paragraph on the two or three most severe risks, R1 first, saying what could go wrong, what covers each, and any known gap. Every risk it names is in the register.
 
-**Sent back when** it lists several risks, restates the change rather than the risk, or names a risk the register does not contain.
+**Sent back when** it restates the change rather than the risks, leaves out R1, or names a risk the register does not contain.
 
-**Depth.** One sentence. The register carries the rest.
+**Depth.** One paragraph. The register carries the rest.
 
 ---
 
@@ -282,7 +284,7 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 **Passes when** it reflects the network path as configured, not as intended.
 
-**Sent back when** the answer is No but the infrastructure shows a public ingress, or the answer treats authentication as equivalent to not being internet-facing. An authenticated endpoint on the public internet is still on the public internet.
+**Sent back when** the answer is No but the infrastructure shows a public ingress, or the answer treats authentication as equivalent to not being internet-facing. An authenticated endpoint on the public internet is still on the public internet. So is a webhook receiver or function URL.
 
 ---
 
@@ -292,7 +294,7 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 **Where the answer is found.** Infrastructure-as-code diffs; the infrastructure plan output; new route, function, or service definitions; API definitions.
 
-**Passes when** it reflects the infrastructure diff.
+**Passes when** it reflects the infrastructure diff or plan between the live version and the release. Any added, removed or changed resource, endpoint, permission or network path is a Yes.
 
 **Sent back when** it is No but the diff adds an endpoint, service, queue, storage account, or database, or changes a network path.
 
@@ -318,7 +320,7 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 **Passes when** the evidence covers the solution being deployed and is current enough to be meaningful.
 
-**Where testing has not been done and the solution is internet-facing,** the guardrails in SKILL.md require this to be stated explicitly in the covering note. Any compensating controls — private endpoints, gateway rules, authentication, network segmentation — should be described in the deployment description field if they exist in the change, and marked `[NEEDS INPUT]` if the developer has not stated them.
+**Where testing has not been done and the solution is internet-facing,** the guardrails in SKILL.md require this to be stated explicitly in the covering note and recorded as a row in the register. Any compensating controls — private endpoints, gateway rules, authentication, network segmentation — should be described in the deployment description field if they exist in the change, and marked `[NEEDS INPUT]` if the developer has not stated them.
 
 ---
 
@@ -327,11 +329,11 @@ For each field: what the CAB is actually trying to establish, where the answer i
 Run these before presenting. Each one catches a contradiction the CAB will otherwise find.
 
 1. **Risk rating against the register.** The rating must be consistent with the most severe register row. Raise any disagreement with the developer.
-2. **Top risk summary against R1.** They must describe the same risk.
+2. **Top risk summary against the register.** It opens with R1, and every risk it names is in the register.
 3. **Change type against change date.** An Emergency change with a distant window, or a Standard change dated for tonight, needs explaining.
 4. **Security answers against each other.** Public internet exposure, plus infrastructure or endpoint changes, plus no penetration testing, is a combination the CAB will question. Surface it rather than let it be discovered.
 5. **Deployment steps against rollback steps.** Every forward step should have a reverse, or an explicit statement that it cannot be reversed. Unpaired steps are where failed deployments become incidents.
 6. **Deployment steps against the verification steps.** Any automation disabled during deployment must be re-enabled after verification, and the verification must cover the behaviour the change alters.
 7. **Attached deployment document against the form fields.** The two must not diverge.
 8. **Impacted users against the register's impact column.** If the register describes impact reaching a group the impacted-users field does not mention, one of them is wrong.
-9. **Every field against its source.** Per Step 5 of the workflow, anything that cannot be traced to a supplied artefact or an explicit statement becomes `[NEEDS INPUT]`.
+9. **Every field against its source.** Per Step 7 of the workflow, anything that cannot be traced to a supplied artefact or an explicit statement becomes `[NEEDS INPUT]`.
