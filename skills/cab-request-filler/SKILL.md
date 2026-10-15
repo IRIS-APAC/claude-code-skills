@@ -52,7 +52,7 @@ The rollback is **one** numbered procedure, not a menu of options. Whoever rolls
 A rollback returns production to the **exact version that was live before**, through the **same pipeline** that deployed the release. Either of these qualifies:
 
 - **Redeploying the previous version** — its release tag, commit or image — where the pipeline accepts one.
-- **An exact revert** — a revert of the release merge(s) that restores the previously-live tree, with `git diff <live-sha> <revert-head>` empty for the deployed paths, merged through the normal PR path and dispatched through the same pipeline. On estates where the deploy credentials trust only branch refs, this is often the only executable route.
+- **An exact revert** — a revert of the release merge(s) that restores the previously-live tree, with `git diff <live-sha> <revert-head>` empty for the deployed paths, merged through the normal PR path and dispatched through the same pipeline. On estates where the deploy credentials trust only branch refs, this is often the only executable route. Revert every merge since the live commit, not just this release's. If the live build matches no commit on the deploy branch — built by hand, or from another branch — no exact revert exists.
 
 These are not rollbacks, so leave them out:
 - **A hand-written fix**, or any revert that does not restore the live tree exactly. This is new code that has never run in production.
@@ -72,7 +72,7 @@ The procedure covers, in order: getting back to the previous version (plan first
 Start from the repository: read the repo, the release branch or PR, and use `gh` for merged PRs, deploy workflow runs and release tags. Then ask for what is still missing in a single message, and wait. Do not begin drafting on the assumption the answers will arrive.
 
 - **The change itself** — repository and branch, pull request, diff, release notes, or deployment document. Read what is supplied directly rather than asking the developer to summarise it.
-- **Everything going live** — all changes merged since the last deploy to this environment, not only the release headline. Take the baseline from the last deploy run or release tag.
+- **Everything going live** — all changes merged since the last deploy to this environment, not only the release headline. Take the baseline from the commit that is live now: the last successful deploy run, the release tag, or the commit in the live image tag. If none can be established, list the changes from the release PR and mark the baseline `[NEEDS INPUT]`.
 - **What is live now** — version, tag, commit, image and configuration such as model or feature flags, and the last deploy date. This is the rollback target, so confirm its artefact still exists.
 - **Client or internal, and project name.**
 - **Change type and pre-approval status** — Standard, Emergency or Pre Approved, and whether a standing approval applies. Always ask; never infer.
@@ -82,7 +82,7 @@ Start from the repository: read the repo, the release branch or PR, and use `gh`
 - **Impacted users** — who is affected, and roughly how many.
 - **Security posture** — penetration testing status, and anything about network exposure the infrastructure code does not show.
 
-If an artefact already answers one of these, do not ask for it again. If the developer says to draft with what is on hand, do so and mark the rest `[NEEDS INPUT]`.
+If an artefact already answers one of these, do not ask for it again. If the developer says to draft with what is on hand, do so and mark the rest `[NEEDS INPUT]`. If nobody can answer — a scheduled or non-interactive run — do not wait: draft with what is on hand and mark the rest `[NEEDS INPUT]`.
 
 ### Step 2 — Read the change and how it deploys
 
@@ -97,7 +97,7 @@ You cannot draft the deployment, verification, rollback, or risk fields honestly
 
 ### Step 3 — Run the tests and capture evidence
 
-On the release head, run the unit tests with coverage and any other checks that are safe to run locally: fixtures, lint, security scans, infrastructure plan or validate. Do not run integration tests against live environments; cite the CI run for the head instead (`gh pr checks`). Write `testing-evidence.txt` from the real output:
+Run the checks in a temporary git worktree of the release head, so coverage files and caches stay out of the developer's checkout; remove it afterwards. Run the unit tests with coverage and any other checks that are safe to run locally: fixtures, lint, security scans, infrastructure plan or validate. Run linters and pre-commit at the versions the repository pins, in check-only mode with no auto-fix; if a check cannot run at its pinned version, cite CI instead of reporting a local finding. Do not run integration tests against live environments; cite the CI run for the head instead (`gh pr checks`). Write `testing-evidence.txt` from the real output:
 
 ```
 <Service> — release testing evidence
@@ -111,6 +111,12 @@ Generated: <YYYY-MM-DD HH:MM TZ> on <uname -sr>
    Command: <exact command>
 ================================================================
 <raw output; trim only noise such as deprecation warnings>
+
+================================================================
+<N>. CI results for <sha>
+   Command: gh pr checks <pr>
+================================================================
+<output>
 ```
 
 Testing Completed is not a checklist to complete. Tick only the options where testing was actually done and mark the rest unticked. One tick is enough, and it can be Other. Do not run new kinds of testing, or stretch a result to fit an option, just to tick more boxes.
@@ -141,7 +147,7 @@ Copy `assets/risk-register-template.md` to a working location and fill it in. Th
 
 **Structure of the template.** The metadata block has six labelled rows: Client, Project, Change ID, Change date, CAB date, Prepared by. The risk table has six columns in this order: ID, Risk, Likelihood, Impact if realised, Mitigation, Owner. Five empty rows are provided; add or delete rows to match the number of risks. Do not add columns, rename headers, or reorder them — the CAB reads these registers side by side across submissions.
 
-**Completing the metadata block.** Fill every row from the developer's supplied context. Change ID is whatever identifier the change is tracked under — ticket, release, or change number; if the developer has not supplied one, mark it `[NEEDS INPUT]` rather than inventing a format. CAB date is the meeting the change is being submitted to, which is not the same as the change date. Prepared by is the person drafting the submission, who may differ from the risk owners.
+**Completing the metadata block.** Fill every row from the developer's supplied context. Change ID is the CAB or change-management number if one exists, otherwise the release tag or branch; use a PR number only if nothing else tracks the change. If none exists, mark it `[NEEDS INPUT]` rather than inventing a format. CAB date is the meeting the change is being submitted to, which is not the same as the change date. Prepared by is the person drafting the submission, who may differ from the risk owners.
 
 **Completing the risk table.**
 
@@ -151,7 +157,7 @@ Copy `assets/risk-register-template.md` to a working location and fill it in. Th
 4. **Likelihood** is High, Medium, or Low — the honest chance with the controls that already exist, not before them. A failure mode that has never run in production should not be recorded as Low purely because it has not happened yet.
 5. **Impact if realised** states the consequence for the business, its users, or its data. Describe the outcome, not the internal code behaviour that produces it.
 6. **Mitigation** states a specific action that reduces likelihood or impact, citing the evidence from Step 3 or the step in the deployment document. Monitoring qualifies only if the row names the signal watched, who watches it, and the action that follows. Removing the risk from the cutover — for example by disabling the affected path at go-live — is stronger than observing it.
-7. **Owner** is a named individual accountable for the mitigation, including after go-live. Not a team.
+7. **Owner** is a named individual accountable for the mitigation, including after go-live. Not a team. If the developer has not named one, write `[NEEDS INPUT: owner for R<n>]`. Do not default to the implementer: owning a mitigation after go-live is a commitment only that person can make.
 8. Delete any unused empty rows.
 9. Save the result as `risk-and-mitigation-register.docx` in the output folder (use the docx skill if available, otherwise python-docx).
 
@@ -177,7 +183,7 @@ This self-check reduces fabrication. It does not eliminate it: a drafted answer 
 
 ### Step 8 — Present
 
-Print the answers in chat, all twenty-five in form order, with the form's numbering and question wording, ready to transfer into the form:
+Print the answers in chat, all twenty-five in form order, with the numbering and question wording from the field-guide headings, ready to transfer into the form:
 
 - Choice fields: the option, with a short basis in brackets where the field guide asks for one.
 - Testing Completed: one line per option (Unit Testing, Code coverage > 80%, UAT Testing, Other), each marked ✅ or ❌ with its result.

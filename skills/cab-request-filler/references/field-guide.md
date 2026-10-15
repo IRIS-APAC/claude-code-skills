@@ -1,6 +1,6 @@
 # Field guide
 
-Field numbering for the CAB Requests form (structure as at 18 August 2026: six sections, twenty-five fields). This file is the only place field numbers appear — SKILL.md refers to fields by name.
+Field numbering for the CAB Requests form (structure as at 15 October 2026: six sections, twenty-five fields; Testing Completed includes Other). This file is the only place field numbers appear — SKILL.md refers to fields by name.
 
 For each field: what the CAB is actually trying to establish, where the answer is normally found in a project, and the criteria that separate an answer that passes from one that gets sent back.
 
@@ -54,7 +54,7 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 **Where the answer is found.** Derived from the completed register — not chosen independently of it.
 
-**Passes when** it is consistent with the most severe row in the register.
+**Passes when** it is consistent with the most severe row in the register. If the developer has stated no rating, give the register's and say that is where it came from.
 
 **Sent back when** it is lower than the register supports. A register carrying a High-likelihood row, or a row whose impact reaches money, customer data, or production availability, cannot sit under a Low rating. Where the developer's stated rating and the register disagree, raise it with them; do not silently adopt either.
 
@@ -252,7 +252,7 @@ For each field: what the CAB is actually trying to establish, where the answer i
 
 ### Q20. Risk & Mitigation Register — file upload, required
 
-**Note on form structure.** In the form as at 18 August 2026 this field sits under the Security section heading, immediately after the Top Risk Summary. It belongs with the risks section; the boundary appears misplaced. Treat it as part of the risks section. Recommend the correction to the form owner.
+**Note on form structure.** In the form (first noted 18 August 2026) this field sits under the Security section heading, immediately after the Top Risk Summary. It belongs with the risks section; the boundary appears misplaced. Treat it as part of the risks section. Recommend the correction to the form owner.
 
 **What it is asking.** The full set of risks the submitter identified, with likelihood, impact, mitigation, and an accountable owner for each — the record of what was known at the time of approval.
 
