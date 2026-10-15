@@ -1,6 +1,6 @@
 ---
 name: cab-request
-description: "Prepare a CAB (Change Advisory Board) request for a production release. Drafts the CAB form answers (what is being deployed, risk rating, testing completed, testing evidence, deployment / PVT / rollback steps, impacted users, top risk summary) and generates the testing-evidence file, deployment document and risk & mitigation register. Use whenever the user mentions CAB, a change request, change approval, a release going to prod that needs sign-off, or asks for deployment, PVT or rollback steps or a risk register for a release, even if they don't say 'CAB'."
+description: "Prepare a CAB (Change Advisory Board) request for a production release. Drafts the CAB form answers (what is being deployed, risk rating, testing completed, testing evidence, deployment / PVT / rollback steps, impacted users, top risk summary, security questions) and generates the testing-evidence file, deployment document and risk & mitigation register. Use whenever the user mentions CAB, a change request, change approval, a release going to prod that needs sign-off, or asks for deployment, PVT or rollback steps or a risk register for a release, even if they don't say 'CAB'."
 ---
 
 # CAB Request
@@ -58,7 +58,17 @@ Find these in the repo and with `gh`. Ask the user only for what you can't find.
 ### 2. Read how this repo deploys
 Read the deploy workflow, the IaC and any runbooks, so the steps match reality. Check whether it is a manual dispatch or deploys on merge, and whether a plan step comes before apply. Check **whether it can deploy a previous version**; the rollback depends on this (see above). Note what the deploy touches. Note what must never be replaced: databases, buckets, keys and stored state.
 
-### 3. Run the tests and capture evidence (Q9, Q10)
+### 3. Work out the security answers (Q21–Q25)
+Answer from the repo and the account as they are configured, not as intended.
+- **Q21 First deployment:** No if step 1 found a live version in this environment. Yes only if the solution has never run there.
+- **Q22 Public internet:** Yes if anything in the solution accepts inbound traffic from the internet: a public URL, API gateway, load balancer, function URL or webhook receiver. Authentication doesn't change the answer.
+- **Q23 Infra or endpoint changes:** Yes if the IaC diff or plan between the live version and the release adds, removes or changes any resource, endpoint, permission or network path. Check the plan, not the PR titles.
+- **Q24 Security/penetration testing:** Yes only if someone tested this solution by trying to break it, through a penetration test or a security assessment. Scanners (Semgrep, Trivy, dependency scans) and code review are not penetration testing, so list them under Q9 Other.
+- **Q25 Evidence:** the path to the penetration test report. Leave it blank if Q24 is No.
+
+If Q22 is Yes and Q24 is No, add a risk row to the register and point it out when presenting the answers. The CAB will ask, so it should hear it from you first.
+
+### 4. Run the tests and capture evidence (Q9, Q10)
 On the release head, run the unit tests with coverage. Also run every other check the repo has: integration tests, fixtures, lint and security scans. Add the CI results for the head (`gh pr checks`). Write `testing-evidence.txt` from the real output:
 
 ```
@@ -77,7 +87,7 @@ Generated: <YYYY-MM-DD HH:MM TZ> on <uname -sr>
 
 If the user supplies screenshots instead, give their paths in Q10.
 
-### 4. Generate the documents (Q17, Q20)
+### 5. Generate the documents (Q17, Q20)
 Write both as Word .docx files. Use the docx skill if it's available; otherwise use python-docx. Make PDF only if asked. Under each title, add one line: service — release · version · prepared date · author.
 
 **Deployment document**
@@ -89,15 +99,16 @@ Write both as Word .docx files. Use the docx skill if it's available; otherwise 
 6. Rollback: the triggers, then the single numbered procedure with exact commands, then a rough duration.
 7. Impacted users and communication: what users see during the window and after it.
 8. Testing summary: a table of Test | Result | Detail, pointing to `testing-evidence.txt`.
+9. Security: first deployment, internet exposure, infrastructure and endpoint changes, and security testing, each with its basis.
 
 **Risk & mitigation register** (landscape)
 - **Overall risk rating** (Low, Medium or High): the highest rating that remains after mitigation, with one paragraph explaining why. This is also the Q4 answer.
 - A table of ID | Risk | Impact | Likelihood | Severity | Rating | Mitigation | Contingency | Owner.
 - A rating key for High, Medium and Low.
 
-Find risks in these places: behaviour changes (model, library, config), how many changes go live at once, first use of a new pipeline or permission, state that could be replaced, external dependencies, rollback limits, gaps in alerting, approval and compliance gaps, and cost. Each mitigation cites evidence from step 3 or a step in the deployment doc. The contingency is the rollback procedure, or a named step in it.
+Find risks in these places: behaviour changes (model, library, config), how many changes go live at once, first use of a new pipeline or permission, state that could be replaced, external dependencies, rollback limits, gaps in alerting, approval and compliance gaps, and cost. Each mitigation cites evidence from step 4 or a step in the deployment doc. The contingency is the rollback procedure, or a named step in it.
 
-### 5. Answer the form
+### 6. Answer the form
 Print the answers in chat in this format, keeping the CAB form's numbering.
 
 **Q9 is not a checklist to complete.** Tick (✅) only the categories where testing was actually done, and mark the rest ❌. One ticked box is enough, and that box can be Other. Don't run new kinds of testing or stretch a result to fit a category just to tick more boxes. An honest "Other: integration tests passed" is better than a padded form.
@@ -138,10 +149,21 @@ Print the answers in chat in this format, keeping the CAB form's numbering.
 <One paragraph: the 2–3 biggest risks, what covers them, and any known gap.>
 
 20. Risk & Mitigation Register: <absolute path>
+
+21. Is this the first time the solution is being deployed: <Yes | No> (<basis>)
+
+22. Is this solution available on the public internet: <Yes | No> (<what is reachable>)
+
+23. Are there changes to infra or additional endpoints: <Yes | No> (<what changes>)
+
+24. Has there been a security/penetration testing: <Yes | No>
+
+25. Security/Penetration testing evidence: <absolute path, or blank>
 ```
 
-### 6. Check before handing over
+### 7. Check before handing over
 - Search the answers and both docs for `#\d+`. Any match is a PR or issue number, so remove it.
 - Confirm that every number in the answers (tests passed, coverage, versions) appears in `testing-evidence.txt` or the doc.
 - Confirm that the Q4 rating matches the register's overall rating.
 - Read the rollback steps once more. They must form one procedure that redeploys the previous version through the pipeline, with no hotfix, revert PR or console step.
+- If Q22 is Yes and Q24 is No, confirm the register has a row for it.
