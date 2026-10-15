@@ -13,10 +13,11 @@ Codex requires SKILL.md YAML frontmatter to include only `name` and `description
 This script generates a Codex-compatible SKILL.md for each installed skill.
 
 Usage:
-  ./install_codex.sh [--dest <skills_dir>] [--copy] [--dry-run]
+  ./install_codex.sh [--dest <skills_dir>] [--config <config_file>] [--copy] [--dry-run]
 
 Options:
   --dest <skills_dir>  Install into a specific skills directory.
+  --config <file>      Update a specific Codex config file.
   --copy               Copy skill directories instead of symlinking their resources.
   --dry-run            Print what would change without modifying anything.
   -h, --help           Show this help text.
@@ -26,6 +27,7 @@ EOF
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 DEST_SKILLS_DIR="$CODEX_HOME/skills"
+CODEX_CONFIG_FILE="$CODEX_HOME/config.toml"
 METHOD="overlay"
 DRY_RUN="0"
 
@@ -35,6 +37,14 @@ while [[ $# -gt 0 ]]; do
       DEST_SKILLS_DIR="${2:-}"
       if [[ -z "$DEST_SKILLS_DIR" ]]; then
         echo "Error: --dest requires a value" >&2
+        exit 2
+      fi
+      shift 2
+      ;;
+    --config)
+      CODEX_CONFIG_FILE="${2:-}"
+      if [[ -z "$CODEX_CONFIG_FILE" ]]; then
+        echo "Error: --config requires a value" >&2
         exit 2
       fi
       shift 2
@@ -62,6 +72,7 @@ done
 echo "Codex Skills Installer"
 echo "Installing from: $REPO_DIR"
 echo "Destination: $DEST_SKILLS_DIR"
+echo "Codex config: $CODEX_CONFIG_FILE"
 echo "Method: $METHOD"
 echo ""
 
@@ -70,6 +81,7 @@ if [[ "$DRY_RUN" == "0" ]]; then
 fi
 
 installed_skills=0
+configured_skills=0
 
 extract_frontmatter_value() {
   # Extracts a scalar value from the first YAML frontmatter block.
@@ -121,6 +133,88 @@ write_codex_skill_md() {
     echo ""
     strip_frontmatter "$src_skill_md"
   } > "$dest_skill_md"
+}
+
+enable_codex_skill_config() {
+  local skill_md_path="$1"
+
+  if [[ "$DRY_RUN" == "1" ]]; then
+    echo "[dry-run] Would enable Codex skill config: $skill_md_path"
+    return
+  fi
+
+  mkdir -p "$(dirname "$CODEX_CONFIG_FILE")"
+  touch "$CODEX_CONFIG_FILE"
+
+  local tmp_config
+  tmp_config="$(mktemp)"
+
+  awk -v "target=$skill_md_path" '
+    function flush_block() {
+      if (!in_block) {
+        return
+      }
+
+      if (path_matches) {
+        found = 1
+        if (!has_enabled) {
+          block = block "enabled = true\n"
+        }
+      }
+
+      printf "%s", block
+      in_block = 0
+      block = ""
+      path_matches = 0
+      has_enabled = 0
+    }
+
+    /^\[\[skills\.config\]\][[:space:]]*$/ {
+      flush_block()
+      in_block = 1
+      block = $0 "\n"
+      next
+    }
+
+    {
+      if (in_block) {
+        line = $0
+
+        if (line ~ /^[[:space:]]*path[[:space:]]*=/) {
+          path_value = line
+          sub(/^[[:space:]]*path[[:space:]]*=[[:space:]]*"/, "", path_value)
+          sub(/"[[:space:]]*$/, "", path_value)
+          if (path_value == target) {
+            path_matches = 1
+          }
+        }
+
+        if (path_matches && line ~ /^[[:space:]]*enabled[[:space:]]*=/) {
+          block = block "enabled = true\n"
+          has_enabled = 1
+          next
+        }
+
+        block = block line "\n"
+        next
+      }
+
+      print
+    }
+
+    END {
+      flush_block()
+
+      if (!found) {
+        print ""
+        print "[[skills.config]]"
+        print "path = \"" target "\""
+        print "enabled = true"
+      }
+    }
+  ' "$CODEX_CONFIG_FILE" > "$tmp_config"
+
+  mv "$tmp_config" "$CODEX_CONFIG_FILE"
 }
 
 if [[ -d "$REPO_DIR/skills" ]]; then
@@ -183,13 +277,16 @@ if [[ -d "$REPO_DIR/skills" ]]; then
     fi
 
     echo "Installed skill: $skill"
+    enable_codex_skill_config "$skill_target/SKILL.md"
     installed_skills=$((installed_skills + 1))
+    configured_skills=$((configured_skills + 1))
   done
 fi
 
 echo ""
 echo "Installation complete:"
 echo "  - $installed_skills skill(s) installed to $DEST_SKILLS_DIR"
+echo "  - $configured_skills skill config(s) enabled in $CODEX_CONFIG_FILE"
 echo ""
 echo "Next steps:"
 echo "  - Restart Codex to pick up new skills."
