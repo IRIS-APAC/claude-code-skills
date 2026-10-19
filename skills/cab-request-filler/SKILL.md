@@ -37,9 +37,11 @@ Write the files to `cab/<repo>-release-<YYYY-MM-DD>/` in the repository's **pare
 
 | File | Form field |
 |---|---|
-| `testing-evidence.txt` | Testing Evidence |
+| `testing-evidence.docx` | Testing Evidence |
 | `deployment-document.docx` | Deployment Doc (generated only if the developer has none) |
 | `risk-and-mitigation-register.docx` | Risk & Mitigation Register |
+
+The form's upload fields accept only Word, Excel, PowerPoint, PDF, image, video or audio files. Never produce a `.txt`, `.md` or other plain-text upload.
 
 The developer supplies the business approval (a required upload) and any penetration test report. The skill cannot produce either.
 
@@ -97,7 +99,7 @@ You cannot draft the deployment, verification, rollback, or risk fields honestly
 
 ### Step 3 — Run the tests and capture evidence
 
-Run the checks in a temporary git worktree of the release head, so coverage files and caches stay out of the developer's checkout; remove it afterwards. Run the unit tests with coverage and any other checks that are safe to run locally: fixtures, lint, security scans, infrastructure plan or validate. Run linters and pre-commit at the versions the repository pins, in check-only mode with no auto-fix; if a check cannot run at its pinned version, cite CI instead of reporting a local finding. Do not run integration tests against live environments; cite the CI run for the head instead (`gh pr checks`). Write `testing-evidence.txt` from the real output:
+Run the checks in a temporary git worktree of the release head, so coverage files and caches stay out of the developer's checkout; remove it afterwards. Run the unit tests with coverage and any other checks that are safe to run locally: fixtures, lint, security scans, infrastructure plan or validate. Run linters and pre-commit at the versions the repository pins, in check-only mode with no auto-fix; if a check cannot run at its pinned version, cite CI instead of reporting a local finding. Do not run integration tests against live environments; cite the CI run for the head instead (`gh pr checks`). Write `testing-evidence.docx` from the real output (use the docx skill if available, otherwise python-docx). Set the body in a monospace font such as Consolas, landscape, so command output keeps its alignment, and follow this layout. Screenshots of CI runs may be added as images, but the raw output stays in the document:
 
 ```
 <Service> — release testing evidence
@@ -138,7 +140,7 @@ If the developer has a deployment document, check it against the deployment, ver
 5. Post-deployment verification (PVT): numbered checks, each with where to look and the expected signal.
 6. Rollback: the triggers, then the single numbered procedure with exact commands, then its duration.
 7. Impacted users and communication: what users see during the window and after it.
-8. Testing summary: a table of Test | Result | Detail, pointing to `testing-evidence.txt`.
+8. Testing summary: a table of Test | Result | Detail, pointing to `testing-evidence.docx`.
 9. Security: first deployment, internet exposure, infrastructure and endpoint changes, and security testing, each with its basis.
 
 ### Step 6 — Build the Risk & Mitigation Register
@@ -175,7 +177,7 @@ Re-read every drafted field and every register row. For each one, identify the s
 
 Then run the cross-field consistency checks at the end of `references/field-guide.md`, and these:
 
-- Every number in the answers — tests passed, coverage, versions — appears in `testing-evidence.txt` or the deployment document.
+- Every number in the answers — tests passed, coverage, versions — appears in `testing-evidence.docx` or the deployment document.
 - The rollback steps form one procedure back to the previous version, as defined above.
 - Every ticket or PR reference follows a plain-words description; none stands in for one.
 
@@ -187,7 +189,7 @@ Print the answers in chat, all twenty-five in form order, with the numbering and
 
 - Choice fields: the option, with a short basis in brackets where the field guide asks for one.
 - Testing Completed: one line per option (Unit Testing, Code coverage > 80%, UAT Testing, Other), each marked ✅ or ❌ with its result.
-- Deployment, PVT and Rollback Steps: numbered lists.
+- Deployment, PVT and Rollback Steps: numbered lists indented under their question, so step numbers cannot be mistaken for question numbers. The same applies to any other list inside an answer.
 - Upload fields: the absolute path of the generated file, or what the developer must attach.
 
 Open with the list of `[NEEDS INPUT]` gaps and the files the developer must supply, business approval first. Put it first, not last.
